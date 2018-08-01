@@ -65,10 +65,10 @@ def compute(a):
             if max(temp) >= 0.8:
                 array[temp.index(max(temp))] += 1
                 print(temp.index(max(temp)))
-        if (max(array)/len(a)) >= 0.8:
             print(len(a))
             print(max(array))
             print(max(array)/len(a))
+        if (max(array)/len(a)) >= 0.8:
             return array.index(max(array))
         else:
             return 0
