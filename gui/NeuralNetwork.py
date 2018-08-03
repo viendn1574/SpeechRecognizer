@@ -32,7 +32,7 @@ def init_dataset():
     ds.setField('target', target)
     ds._convertToOneOfMany()
     global net
-    net = buildNetwork(ds.indim, 80, ds.outdim, outclass=SoftmaxLayer)
+    net = buildNetwork(ds.indim, 200, ds.outdim, outclass=SoftmaxLayer)
     def train():
         back=BackpropTrainer(net,ds,learningrate = 0.0001, momentum = 0.1,verbose=True, weightdecay=0.1)
         #back.trainUntilConvergence(verbose=True)
@@ -62,7 +62,7 @@ def compute(a):
         for i in range(0,len(a)):
             temp=list(net.activate(a[i]))
             print(temp)
-            if max(temp) >= 0.8:
+            if max(temp) >= 0.7:
                 array[temp.index(max(temp))] += 1
                 print(temp.index(max(temp)))
         print(len(a))

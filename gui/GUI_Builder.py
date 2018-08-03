@@ -22,8 +22,8 @@ def vp_start_gui():
         reader=csv.reader(csvfile, delimiter=' ')
         row_count = sum(1 for row in reader)
         if (row_count>0):
-            NeuralNetwork.init_NeuralNetwork()
-            #NeuralNetwork.init_dataset()
+            #NeuralNetwork.init_NeuralNetwork()
+            NeuralNetwork.init_dataset()
     global root
     root = Tk()
     root.resizable(False,False)
