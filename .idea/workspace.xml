@@ -2,13 +2,9 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="e34aee8e-a85a-4637-996f-6120aaeada82" name="Default" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/gui/NeuralNetwork.py" beforeDir="false" afterPath="$PROJECT_DIR$/gui/NeuralNetwork.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/gui/database.csv" beforeDir="false" afterPath="$PROJECT_DIR$/gui/database.csv" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/gui/extract_features.py" beforeDir="false" afterPath="$PROJECT_DIR$/gui/extract_features.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/gui/list_person.txt" beforeDir="false" afterPath="$PROJECT_DIR$/gui/list_person.txt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/gui/net.xml" beforeDir="false" afterPath="$PROJECT_DIR$/gui/net.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/gui/train.csv" beforeDir="false" afterPath="$PROJECT_DIR$/gui/train.csv" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="TRACKING_ENABLED" value="true" />
@@ -19,7 +15,7 @@
   </component>
   <component name="CoverageDataManager">
     <SUITE FILE_PATH="coverage/FeatureExtraction$GUI.coverage" NAME="GUI Coverage Results" MODIFIED="1528216380438" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/gui" />
-    <SUITE FILE_PATH="coverage/SpeechRecognizer$GUI_Builder.coverage" NAME="GUI_Builder Coverage Results" MODIFIED="1533315397359" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/gui" />
+    <SUITE FILE_PATH="coverage/SpeechRecognizer$GUI_Builder.coverage" NAME="GUI_Builder Coverage Results" MODIFIED="1533315858569" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/gui" />
     <SUITE FILE_PATH="coverage/FeatureExtractionPybrain___Copy$GUI_Builder.coverage" NAME="GUI_Builder Coverage Results" MODIFIED="1533141359005" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/gui" />
     <SUITE FILE_PATH="coverage/FeatureExtraction$demobutton.coverage" NAME="demobutton Coverage Results" MODIFIED="1528649621457" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/gui" />
     <SUITE FILE_PATH="coverage/FeatureExtraction$GUI_Builder.coverage" NAME="GUI_Builder Coverage Results" MODIFIED="1529635396468" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/gui" />
@@ -41,11 +37,11 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file leaf-file-name="NeuralNetwork.py" pinned="false" current-in-tab="false">
+      <file leaf-file-name="NeuralNetwork.py" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/gui/NeuralNetwork.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="220">
-              <caret line="70" column="37" selection-start-line="70" selection-start-column="37" selection-end-line="70" selection-end-column="37" />
+            <state relative-caret-position="286">
+              <caret line="65" column="36" selection-start-line="65" selection-start-column="36" selection-end-line="65" selection-end-column="36" />
               <folding>
                 <element signature="e#0#10#0" expanded="true" />
               </folding>
@@ -53,7 +49,7 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="list_person.txt" pinned="false" current-in-tab="true">
+      <file leaf-file-name="list_person.txt" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/gui/list_person.txt">
           <provider selected="true" editor-type-id="text-editor" />
         </entry>
@@ -333,12 +329,11 @@
   </component>
   <component name="ToolWindowManager">
     <frame x="-8" y="-8" width="1382" height="744" extended-state="6" />
-    <editor active="true" />
     <layout>
       <window_info anchor="bottom" id="TODO" order="6" sideWeight="0.49924356" weight="0.32838285" />
       <window_info anchor="bottom" id="Event Log" order="10" sideWeight="0.50226927" side_tool="true" weight="0.34313726" />
       <window_info anchor="bottom" id="Database Changes" order="12" show_stripe_button="false" />
-      <window_info anchor="bottom" id="Run" order="2" sideWeight="0.4977307" visible="true" weight="0.36138615" />
+      <window_info anchor="bottom" id="Run" order="2" sideWeight="0.4977307" weight="0.36138615" />
       <window_info anchor="bottom" id="Version Control" order="7" weight="0.32838285" />
       <window_info anchor="bottom" id="Python Console" order="8" sideWeight="0.49924356" weight="0.21452145" />
       <window_info anchor="bottom" id="Terminal" order="9" sideWeight="0.49924356" weight="0.32838285" />
@@ -700,16 +695,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/gui/NeuralNetwork.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="220">
-          <caret line="70" column="37" selection-start-line="70" selection-start-column="37" selection-end-line="70" selection-end-column="37" />
-          <folding>
-            <element signature="e#0#10#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/gui/database.csv">
       <provider selected="true" editor-type-id="text-editor" />
     </entry>
@@ -725,6 +710,16 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/gui/list_person.txt">
       <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/gui/NeuralNetwork.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="286">
+          <caret line="65" column="36" selection-start-line="65" selection-start-column="36" selection-end-line="65" selection-end-column="36" />
+          <folding>
+            <element signature="e#0#10#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
     </entry>
   </component>
 </project>
