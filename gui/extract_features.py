@@ -43,7 +43,7 @@ def extract_features(filename):
             dataraw=numpy.delete(dataraw,count,0)
         else:
             count+=1
-    return dataraw
+    #return dataraw
 
     # datatemp=[]
     # if len(dataraw)>=80:
@@ -52,3 +52,9 @@ def extract_features(filename):
     #         x_std = StandardScaler().fit_transform(data)
     #         datatemp.append((pca.fit_transform(x_std)).ravel(0))
     # return datatemp
+
+    data=[]
+    for j in range(0,len(dataraw)-3,2):
+        datatemp=dataraw[j:j+3,:]
+        data.append(datatemp.ravel(0))
+    return data

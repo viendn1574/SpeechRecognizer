@@ -19,13 +19,13 @@ def init_NeuralNetwork():
 def init_dataset():
     with open('list_person.txt','r') as lpfile:
         row_count = sum(1 for row in lpfile)
-    ds = ClassificationDataSet(39,1,nb_classes=row_count+1)
+    ds = ClassificationDataSet(117,1,nb_classes=row_count+1)
 
     dataframe = pandas.read_csv("train.csv", delimiter=" ",header=None)
     dataset = dataframe.values
     dataframe = pandas.read_csv("database.csv", delimiter=" ", header=None)
     dataset=numpy.concatenate((dataset,dataframe.values))
-    input=dataset[:,1:40].astype(float)
+    input=dataset[:,1:118].astype(float)
     target=dataset[:,0]
     target = numpy.reshape(target, (-1, 1))
     ds.setField('input', input)
@@ -65,10 +65,10 @@ def compute(a):
             if max(temp) >= 0.8:
                 array[temp.index(max(temp))] += 1
                 print(temp.index(max(temp)))
-            print(len(a))
-            print(max(array))
-            print(max(array)/len(a))
-        if (max(array)/len(a)) >= 0.8:
+        print(len(a))
+        print(max(array))
+        print(max(array)/len(a))
+        if (max(array)/len(a)) >= 0.7:
             return array.index(max(array))
         else:
             return 0
