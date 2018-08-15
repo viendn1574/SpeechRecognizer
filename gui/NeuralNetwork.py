@@ -45,7 +45,9 @@ def add_model(dataset):
 def compute(a):
     global model
     number_person=model.__len__()
-    if len(a) == 0:
+    if number_person==0:
+        return 0
+    if len(a) <= 20 :
         return -1
     result_allperson=list(numpy.zeros(number_person))
     for person_count in range(0,number_person):
