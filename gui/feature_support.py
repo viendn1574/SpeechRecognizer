@@ -50,7 +50,7 @@ def Record_click(event,label1):
     print('feature_support.Record_click')
     global add
     if add > 0:
-        if add < 7:
+        if add < 9:
             label1.configure(text="Add lan thu %d" %add)
 
         else:
@@ -92,7 +92,7 @@ def Record_release(event,Label1):
             add +=1
         else:
             Label1.configure(text="Add khong thanh cong lan %d, ban noi qua nhanh" %add)
-    if add==7:
+    if add==9:
         number_person=0
         with open('./data/list_person.txt','a') as lpfile:
             with open('person_temp.txt','r') as ptemp:
@@ -115,8 +115,8 @@ def Record_release(event,Label1):
         os.remove('person_temp.txt')
         GUI_Builder.top.Button1.config(state=DISABLED)
 
-    os.remove('nonblocking.wav')
-    os.remove('nonblocking_filtered.wav')
+    #os.remove('nonblocking.wav')
+    #os.remove('nonblocking_filtered.wav')
     sys.stdout.flush()
 
 

@@ -46,7 +46,7 @@ def extract_features(filename):
     reduce_noise(filename)
     namefile = filename.replace(".wav", "")
     rate,sig = read(namefile+'_filtered.wav')  # Y gives
-    mfcc_feat = extract_mfcc(sig,appendEnergy=True,numcep=12)
+    mfcc_feat = extract_mfcc(sig,appendEnergy=False,numcep=12)
     GUI=GUI_Builder.top
     GUI.canvas_show(sig,mfcc_feat)
     delta_mfcc = delta(mfcc_feat, 2)
