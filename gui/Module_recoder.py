@@ -1,6 +1,9 @@
-import time
+import numpy
 import pyaudio
 import wave
+import scipy.signal as signal
+
+import GUI_Builder
 
 class Recorder(object):
     '''A recorder class for recording audio to a WAV file.
@@ -55,7 +58,7 @@ class RecordingFile(object):
                                      input=True,
                                      frames_per_buffer=self.frames_per_buffer,
                                      stream_callback=self.get_callback())
-        self._stream.start_stream()
+
         return self
 
     def stop_recording(self):

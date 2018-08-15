@@ -1,12 +1,26 @@
 import numpy
-from scipy.io import wavfile
+
+from scipy.io.wavfile import read
+from scipy.io.wavfile import write
 from python_speech_features import fbank, dct, lifter
 from python_speech_features import delta
 from pybrain.tools.xml import NetworkReader
-from sklearn import decomposition
-from sklearn.preprocessing import StandardScaler
 
-net_noise=NetworkReader.readFrom('net_noise.xml')
+import GUI_Builder
+
+net_noise=NetworkReader.readFrom('./model/net_noise.xml')
+def reduce_noise(filename):
+    namefile = filename.replace(".wav", "")
+    lowpass = 21 # Remove lower frequencies.
+    highpass = 9000 # Remove higher frequencies.
+    (Frequency, array) = read(filename)
+    lf = numpy.fft.rfft(array)
+    lf[:lowpass]= 0 # low pass filter
+    lf[44:77]= 0# line noise
+    lf[highpass:]= 0 # high pass filter
+    nl = numpy.fft.irfft(lf)
+    ns = numpy.column_stack(nl).ravel().astype(numpy.int16)
+    write(namefile+'_filtered.wav', Frequency,ns)
 
 def extract_mfcc(signal,samplerate=16000,winlen=0.025,winstep=0.01,numcep=13,
          nfilt=26,nfft=512,lowfreq=0,highfreq=None,preemph=0.97,ceplifter=22,appendEnergy=True,
@@ -29,9 +43,12 @@ def isNoise(a):
         return 0
 
 def extract_features(filename):
-    pca = decomposition.PCA(n_components=18)
-    rate,sig = wavfile.read(filename)  # Y gives
+    reduce_noise(filename)
+    namefile = filename.replace(".wav", "")
+    rate,sig = read(namefile+'_filtered.wav')  # Y gives
     mfcc_feat = extract_mfcc(sig,appendEnergy=True,numcep=12)
+    GUI=GUI_Builder.top
+    GUI.canvas_show(sig,mfcc_feat)
     delta_mfcc = delta(mfcc_feat, 2)
     delta_mfcc_2 = delta(delta_mfcc, 2)
 
@@ -43,15 +60,6 @@ def extract_features(filename):
             dataraw=numpy.delete(dataraw,count,0)
         else:
             count+=1
-    #return dataraw
-
-    # datatemp=[]
-    # if len(dataraw)>=80:
-    #     for j in range(0,len(dataraw)-79,50):
-    #         data=dataraw[j:j+80,:]
-    #         x_std = StandardScaler().fit_transform(data)
-    #         datatemp.append((pca.fit_transform(x_std)).ravel(0))
-    # return datatemp
 
     data=[]
     for j in range(0,len(dataraw)-3,2):

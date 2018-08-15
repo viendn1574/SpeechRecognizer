@@ -9,68 +9,62 @@ from pybrain.structure.modules   import SoftmaxLayer
 from pybrain.tools.xml import NetworkWriter
 from pybrain.tools.xml import NetworkReader
 
-global net
+model = []
 
-def init_NeuralNetwork():
-    global net
-    net = NetworkReader.readFrom('net.xml')
-
-
-def init_dataset():
-    with open('list_person.txt','r') as lpfile:
+def init_model():
+    global model
+    with open('./data/list_person.txt','r') as lpfile:
         row_count = sum(1 for row in lpfile)
-    ds = ClassificationDataSet(117,1,nb_classes=row_count+1)
+    for i in range(1,row_count+1):
+        net = NetworkReader.readFrom('./model/net%d.xml'%i)
+        model.insert(model.__len__(),net)
 
-    dataframe = pandas.read_csv("train.csv", delimiter=" ",header=None)
-    dataset = dataframe.values
-    dataframe = pandas.read_csv("database.csv", delimiter=" ", header=None)
-    dataset=numpy.concatenate((dataset,dataframe.values))
-    input=dataset[:,1:118].astype(float)
-    target=dataset[:,0]
+
+def add_model(dataset):
+    ds = ClassificationDataSet(117,1,nb_classes=2)
+    dataframe = pandas.read_csv("./data/train.csv", delimiter=" ",header=None)
+    data_train = dataframe.values
+    #dataframe = pandas.read_csv("database.csv", delimiter=" ", header=None)
+    data_train=numpy.concatenate((data_train,dataset))
+    input=data_train[:,1:118].astype(float)
+    target=data_train[:,0]
     target = numpy.reshape(target, (-1, 1))
     ds.setField('input', input)
     ds.setField('target', target)
     ds._convertToOneOfMany()
-    global net
-    net = buildNetwork(ds.indim, 200, ds.outdim, outclass=SoftmaxLayer)
+    net = buildNetwork(ds.indim, 50, ds.outdim, outclass=SoftmaxLayer)
     def train():
+        global model
         back=BackpropTrainer(net,ds,learningrate = 0.0001, momentum = 0.1,verbose=True, weightdecay=0.1)
         #back.trainUntilConvergence(verbose=True)
         back.trainEpochs(100)
-        with open('database.csv','r') as csvfile:
-            reader=csv.reader(csvfile, delimiter=' ')
-            for row in reader:
-                temp= [float(row[0])]
-                del(row[0])
-                temp1=row
-                i=0
-                for value in row:
-                    temp1[i]= float(value)
-                    i+=1
-                print(compute([temp1]))
-        NetworkWriter.writeToFile(net, 'net.xml')
+        NetworkWriter.writeToFile(net, './model/net%d.xml'%(model.__len__()+1))
+        model.append(net)
     train()
 
 def compute(a):
-    global net
+    global model
+    number_person=model.__len__()
     if len(a) == 0:
         return -1
-    with open('list_person.txt','r') as lpfile:
-        row_count = sum(1 for row in lpfile)
-    array=list(numpy.zeros(row_count+1))
-    if row_count>0:
+    result_allperson=list(numpy.zeros(number_person))
+    for person_count in range(0,number_person):
+        result_person=list(numpy.zeros(2))
         for i in range(0,len(a)):
-            temp=list(net.activate(a[i]))
-            print(temp)
-            if max(temp) >= 0.7:
-                array[temp.index(max(temp))] += 1
-                print(temp.index(max(temp)))
-        print(len(a))
-        print(max(array))
-        print(max(array)/len(a))
-        if (max(array)/len(a)) >= 0.7:
-            return array.index(max(array))
-        else:
-            return 0
-    else:
-        return 0
+            activate=list(model[person_count].activate(a[i]))
+            if activate[1] >= 0.7:
+                result_person[1] += 1
+            else: result_person[0] += 1
+        print result_person
+        print result_person[1]/len(a)
+        if result_person[1]/len(a) >= 0.8:
+            result_allperson[person_count]=result_person[1]/len(a)
+    print result_allperson
+    if max(result_allperson) >= 0.8:
+        return result_allperson.index(max(result_allperson))+1
+    else: return 0
+
+
+def remove_model(indexModel):
+    global model
+    del model[indexModel-1]

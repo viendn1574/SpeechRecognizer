@@ -1,12 +1,10 @@
 import tkMessageBox
 
-import librosa
+import GUI_Builder
 import csv
 import numpy
 import os
-
-from sklearn import decomposition
-
+import fileinput
 import NeuralNetwork
 
 from Tkinter import *
@@ -34,7 +32,7 @@ def Add_click(root):
     def OK(t1):
         print('feature_support.OK_click')
         u1 = t1.get()
-        with open('list_person.txt','r') as lpfile:
+        with open('./data/list_person.txt','r') as lpfile:
             person_count = sum(1 for person in lpfile)
             with open('person_temp.txt','w') as pfile:
                 pfile.write("%s %s"%(person_count+1,u1))
@@ -77,7 +75,7 @@ def Edit_click(root,Listbox):
             u1 = t1.get()
             newrow=[]
             selected=Listbox.get(ACTIVE)
-            with open('list_person.txt','r') as lpfile:
+            with open('./data/list_person.txt','r') as lpfile:
                 list_person=lpfile.read()
                 for person in list_person:
                     row=person.split()
@@ -85,7 +83,7 @@ def Edit_click(root,Listbox):
                         if (int(row[0])==int(selected[0])):
                             row[1]=u1
                         newrow.append(row)
-            with open('list_person.txt','w') as lpfile:
+            with open('./data/list_person.txt','w') as lpfile:
                 i=0
                 for row in newrow:
                     Listbox.delete(i)
@@ -120,11 +118,11 @@ def List_click():
     bAdd.place(relx=0.05, rely=0.05)
     bEdit=Button(root, text="Edit",width=10,command=lambda: Edit_click(root,Lb))
     bEdit.place(relx=0.375, rely=0.05)
-    bDel=Button(root,text="Delete",width=10)
+    bDel=Button(root,text="Delete",width=10,command=lambda: Delete_click(root,Lb))
     bDel.place(relx=0.7, rely=0.05)
     Lb=Listbox(root,width=45)
     Lb.place(relx=0.05, rely=0.2)
-    with open('list_person.txt','r') as lpfile:
+    with open('./data/list_person.txt','r') as lpfile:
         for person in lpfile:
             row=person.split()
             if (row != []):
@@ -133,19 +131,22 @@ def List_click():
     sys.stdout.flush()
 
 
-rec = Module_recoder.Recorder(channels=1)
+rec = Module_recoder.Recorder(channels=1,frames_per_buffer=1024)
 global recfile2
 
 
 def Record_click(event,label1):
+
     if os.path.exists('nonblocking.wav'):
         os.remove('nonblocking.wav')
+    if os.path.exists('nonblocking_filtered.wav'):
+        os.remove('nonblocking_filtered.wav')
     global recfile2
     recfile2= rec.open('nonblocking.wav', 'wb')
     print('feature_support.Record_click')
     global add
     if add > 0:
-        if add < 11:
+        if add < 7:
             label1.configure(text="Add lan thu %d" %add)
 
         else:
@@ -185,27 +186,30 @@ def Record_release(event,Label1):
             add +=1
         else:
             Label1.configure(text="Add khong thanh cong lan %d, ban noi qua nhanh" %add)
-    if add==11:
+    if add==7:
         number_person=0
-        with open('list_person.txt','a') as lpfile:
+        with open('./data/list_person.txt','a') as lpfile:
             with open('person_temp.txt','r') as ptemp:
                 person=ptemp.readline()
                 lpfile.write(person+'\n')
                 number_person=person[0]
                 ptemp.close()
             lpfile.close()
-        with open('database.csv','a') as csvdata:
+        with open('./data/database.csv','a') as csvdata:
             writer =csv.writer(csvdata,delimiter=' ')
             for i in range(0,len(data1)):
-                a=numpy.append([int(number_person)],data1[i])
+                data1[i]=numpy.append([1],data1[i])
+                a=list(data1[i])
+                a[0]=int(number_person)
                 writer.writerow(a,)
+        NeuralNetwork.add_model(data1)
         data1 = []
         add = 0
         Label1.configure(text="")
         os.remove('person_temp.txt')
-        NeuralNetwork.init_dataset()
 
-    os.remove('nonblocking.wav')
+    #os.remove('nonblocking.wav')
+    #os.remove('nonblocking_filtered.wav')
     sys.stdout.flush()
 
 
@@ -216,11 +220,11 @@ def CancleAdd_click(Label1):
     global data1
     for i in range(0,5):
         data1[i]=[]
-    os.remove('datatemp.csv')
+    os.remove('person_temp.txt')
 
-def Login_click(button):
+def Login_click(buttonLogin,buttonList):
     print('feature_support.Login_click')
-    Login_box.popuplogin(button)
+    Login_box.popuplogin(buttonLogin,buttonList)
     sys.stdout.flush()
 
 def init(top, gui, *args, **kwargs):
@@ -237,5 +241,69 @@ def destroy_window():
     top_level = None
 
 
+def Delete_click(root,Listbox):
+    if (Listbox.curselection()!=()):
+        root.grab_release()
+        print("Delete click")
+        popup= Toplevel()
+        popup.resizable(False,False)
+        popup.geometry("200x150+700+300")
+        popup.grab_set()
 
+        def Cancle():
+            popup.grab_release()
+            root.grab_set()
+            popup.destroy()
 
+        def OK(Listbox):
+            print('feature_support.OK_click')
+
+            newrow=[]
+            selected=Listbox.get(ACTIVE)
+            for line in fileinput.input("./data/database.csv", inplace=True):
+                if line=='\n':
+                    continue
+                if int(line[0]) < int(selected[0]):
+                    print line,
+                if int(line[0]) > int(selected[0]):
+                    newline=line.split()
+                    newline[0]=str(int(newline[0])-1)
+                    print " ".join(newline)
+                    print '\n',
+            fileinput.close()
+            with open('./data/list_person.txt','r') as lpfile:
+                row_count = sum(1 for row in lpfile)
+            os.remove('./model/net%d.xml'%int(selected[0]))
+            if (row_count > 1)or(int(selected[0])!=row_count):
+                for i in range(int(selected[0])+1,row_count+1):
+                    os.rename('./model/net%d.xml'%i,'./model/net%d.xml'%(i-1))
+            with open('./data/list_person.txt','r') as lpfile:
+                for row in lpfile:
+                    if (row!=[]):
+                        row=row.split()
+                        if (int(row[0])<int(selected[0])):
+                            newrow.append(row)
+                        if (int(row[0])>int(selected[0])):
+                            row[0]=int(row[0])-1
+                            newrow.append(row)
+            Listbox.delete(0,END)
+            with open('./data/list_person.txt','w') as lpfile:
+                i=0
+                for row in newrow:
+                    Listbox.insert(i,"%d ----- %s" % (int(row[0]), row[1]))
+                    lpfile.write("%s %s\n"%(row[0],row[1]))
+                    i += 1
+            NeuralNetwork.remove_model(int(selected[0]))
+            popup.destroy()
+            root.grab_set()
+
+        popup.wm_title("Delete")
+        l1 = Label(popup, text="Ban co muon xoa !")
+        b1 = Button(popup, text="OK",width=7, command= lambda: OK(Listbox))
+        b2 = Button(popup, text="Cancle",width=7, command=Cancle)
+        l1.pack()
+        b1.place(relx=0.18, rely=0.6)
+        b2.place(relx=0.52, rely=0.6)
+        popup.mainloop()
+    else:
+        tkMessageBox.showinfo("Error", "Vui long chon doi tuong")
