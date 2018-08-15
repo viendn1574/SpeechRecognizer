@@ -1,15 +1,6 @@
-try:
-    from Tkinter import *
-except ImportError:
-    from Tkinter import *
+from Tkinter import *
+import feature_support
 import tkMessageBox
-
-try:
-    import ttk
-    py3 = False
-except ImportError:
-    import tkinter.ttk as ttk
-    py3 = True
 
 
 login = False
@@ -61,6 +52,8 @@ def popuplogin(buttonLogin, buttonList):
         login = False
         buttonLogin.configure(text="Log in")
         buttonList.config(state=DISABLED)
+        if feature_support.add>0:
+            feature_support.CancleAdd_click()
 
 
 

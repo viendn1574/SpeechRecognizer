@@ -54,14 +54,14 @@ class New_Toplevel:
         self.Button1.configure(activebackground="#d9d9d9")
         self.Button1.configure(activeforeground="#000000")
         self.Button1.configure(background="#d9d9d9")
-        self.Button1.configure(command=lambda: feature_support.CancleAdd_click(self.Label1))
+        self.Button1.configure(command=feature_support.CancleAdd_click)
         self.Button1.configure(disabledforeground="#a3a3a3")
         self.Button1.configure(foreground="#000000")
         self.Button1.configure(highlightbackground="#d9d9d9")
         self.Button1.configure(highlightcolor="black")
         self.Button1.configure(pady="0")
         self.Button1.configure(text='''Cancle add''')
-
+        self.Button1.config(state=Tkinter.DISABLED)
 
 
         self.Button4 = Tkinter.Button(top)
