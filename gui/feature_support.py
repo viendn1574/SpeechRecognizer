@@ -126,7 +126,6 @@ def CancleAdd_click():
     add=0
     global data1
     data1=[]
-
     GUI_Builder.top.Button1.config(state=DISABLED)
     os.remove('person_temp.txt')
 
