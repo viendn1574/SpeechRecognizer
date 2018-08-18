@@ -115,8 +115,8 @@ def Record_release(event,Label1):
         os.remove('person_temp.txt')
         GUI_Builder.top.Button1.config(state=DISABLED)
 
-    #os.remove('nonblocking.wav')
-    #os.remove('nonblocking_filtered.wav')
+    os.remove('nonblocking.wav')
+    os.remove('nonblocking_filtered.wav')
     sys.stdout.flush()
 
 
@@ -125,8 +125,7 @@ def CancleAdd_click():
     global add
     add=0
     global data1
-    for i in range(0,data1.__len__()):
-        data1[i]=[]
+    data1=[]
     GUI_Builder.top.Button1.config(state=DISABLED)
     os.remove('person_temp.txt')
 
