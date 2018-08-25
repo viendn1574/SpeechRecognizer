@@ -4,48 +4,50 @@ import tkMessageBox
 from Tkinter import Toplevel, Label, Entry, Button, ACTIVE, END, NORMAL
 
 import NeuralNetwork
+import Add_box
 import feature_support
 import GUI_Builder
 
 
 def Add_click(root):
-    root.grab_release()
-    print("add click")
-    popup= Toplevel()
-    popup.resizable(False,False)
-    popup.geometry("200x150+700+300")
-    popup.grab_set()
-    def Cancle():
-        popup.grab_release()
-        root.grab_set()
-        popup.destroy()
-
-
-    def OK(t1):
-        print('feature_support.OK_click')
-        u1 = t1.get()
-        with open('./data/list_person.txt','r') as lpfile:
-            person_count = sum(1 for person in lpfile)
-            with open('person_temp.txt','w') as pfile:
-                pfile.write("%s %s"%(person_count+1,u1))
-                pfile.close()
-            lpfile.close()
-        GUI_Builder.top.Button1.config(state=NORMAL)
-        popup.destroy()
-        root.destroy()
-        feature_support.add += 1
-
-    popup.wm_title("Enter name")
-    l1 = Label(popup, text="Name")
-
-    t1 = Entry(popup, textvariable="")
-
-    b1 = Button(popup, text="OK",width=7, command= lambda: OK(t1))
-    b2 = Button(popup, text="Cancle",width=7, command=Cancle)
-    l1.pack()
-    t1.pack()
-    b1.place(relx=0.18, rely=0.6)
-    b2.place(relx=0.52, rely=0.6)
+    Add_box.GUI()
+    # root.grab_release()
+    # print("add click")
+    # popup= Toplevel()
+    # popup.resizable(False,False)
+    # popup.geometry("200x150+700+300")
+    # popup.grab_set()
+    # def Cancle():
+    #     popup.grab_release()
+    #     root.grab_set()
+    #     popup.destroy()
+    #
+    #
+    # def OK(t1):
+    #     print('feature_support.OK_click')
+    #     u1 = t1.get()
+    #     with open('./data/list_person.txt','r') as lpfile:
+    #         person_count = sum(1 for person in lpfile)
+    #         with open('person_temp.txt','w') as pfile:
+    #             pfile.write("%s %s"%(person_count+1,u1))
+    #             pfile.close()
+    #         lpfile.close()
+    #     GUI_Builder.top.Button1.config(state=NORMAL)
+    #     popup.destroy()
+    #     root.destroy()
+    #     feature_support.add += 1
+    #
+    # popup.wm_title("Enter name")
+    # l1 = Label(popup, text="Name")
+    #
+    # t1 = Entry(popup, textvariable="")
+    #
+    # b1 = Button(popup, text="OK",width=7, command= lambda: OK(t1))
+    # b2 = Button(popup, text="Cancle",width=7, command=Cancle)
+    # l1.pack()
+    # t1.pack()
+    # b1.place(relx=0.18, rely=0.6)
+    # b2.place(relx=0.52, rely=0.6)
 
 def Edit_click(root,Listbox):
     if (Listbox.curselection()!=()):
