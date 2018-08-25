@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 import fileinput
 import os
 import tkMessageBox
@@ -13,7 +14,7 @@ def Add_click(root):
     print("add click")
     popup= Toplevel()
     popup.resizable(False,False)
-    popup.geometry("200x150+700+300")
+    popup.geometry("200x100+700+300")
     popup.grab_set()
     def Cancle():
         popup.grab_release()
@@ -24,10 +25,10 @@ def Add_click(root):
     def OK(t1):
         print('feature_support.OK_click')
         u1 = t1.get()
-        with open('./data/list_person.txt','r') as lpfile:
+        with open('./data/list_person.txt','rb') as lpfile:
             person_count = sum(1 for person in lpfile)
-            with open('person_temp.txt','w') as pfile:
-                pfile.write("%s %s"%(person_count+1,u1))
+            with open('person_temp.txt','wb') as pfile:
+                pfile.write("%s %s"%(person_count+1,u1.encode('utf-8')))
                 pfile.close()
             lpfile.close()
         GUI_Builder.top.Button1.config(state=NORMAL)
@@ -53,7 +54,7 @@ def Edit_click(root,Listbox):
         print("edit click")
         popup= Toplevel()
         popup.resizable(False,False)
-        popup.geometry("200x150+700+300")
+        popup.geometry("200x100+700+300")
         popup.grab_set()
         def Cancle():
             popup.grab_release()
@@ -66,19 +67,19 @@ def Edit_click(root,Listbox):
             u1 = t1.get()
             newrow=[]
             selected=Listbox.get(ACTIVE)
-            with open('./data/list_person.txt','r') as lpfile:
+            with open('./data/list_person.txt','rb') as lpfile:
                 for person in lpfile:
                     row=person.split()
                     if (row!=[]):
                         if (int(row[0])==int(selected[0])):
-                            row[1]=u1
+                            row[1]=u1.encode('utf-8')
                         newrow.append(row)
-            with open('./data/list_person.txt','w') as lpfile:
+            with open('./data/list_person.txt','wb') as lpfile:
                 i=0
                 for row in newrow:
                     Listbox.delete(i)
                     Listbox.insert(i,"%d ----- %s"%(int(row[0]),row[1]) )
-                    lpfile.write(row)
+                    lpfile.write("%s %s\n"%(row[0],row[1]))
                     i += 1
             Listbox.update()
             popup.destroy()
@@ -96,7 +97,7 @@ def Edit_click(root,Listbox):
         b2.place(relx=0.52, rely=0.6)
         popup.mainloop()
     else:
-        tkMessageBox.showinfo("Error", "Vui long chon doi tuong")
+        tkMessageBox.showinfo("Error", "Vui lòng chọn đối tượng")
 
 def Delete_click(root,Listbox):
     if (Listbox.curselection()!=()):
@@ -104,7 +105,7 @@ def Delete_click(root,Listbox):
         print("Delete click")
         popup= Toplevel()
         popup.resizable(False,False)
-        popup.geometry("200x150+700+300")
+        popup.geometry("200x100+700+300")
         popup.grab_set()
 
         def Cancle():
@@ -128,13 +129,13 @@ def Delete_click(root,Listbox):
                     print " ".join(newline)
                     print '\n',
             fileinput.close()
-            with open('./data/list_person.txt','r') as lpfile:
+            with open('./data/list_person.txt','rb') as lpfile:
                 row_count = sum(1 for row in lpfile)
             os.remove('./model/net%d.xml'%int(selected[0]))
             if (row_count > 1)or(int(selected[0])!=row_count):
                 for i in range(int(selected[0])+1,row_count+1):
                     os.rename('./model/net%d.xml'%i,'./model/net%d.xml'%(i-1))
-            with open('./data/list_person.txt','r') as lpfile:
+            with open('./data/list_person.txt','rb') as lpfile:
                 for row in lpfile:
                     if (row!=[]):
                         row=row.split()
@@ -144,7 +145,7 @@ def Delete_click(root,Listbox):
                             row[0]=int(row[0])-1
                             newrow.append(row)
             Listbox.delete(0,END)
-            with open('./data/list_person.txt','w') as lpfile:
+            with open('./data/list_person.txt','wb') as lpfile:
                 i=0
                 for row in newrow:
                     Listbox.insert(i,"%d ----- %s" % (int(row[0]), row[1]))
@@ -155,12 +156,12 @@ def Delete_click(root,Listbox):
             root.grab_set()
 
         popup.wm_title("Delete")
-        l1 = Label(popup, text="Ban co muon xoa !")
+        l1 = Label(popup, text="Bạn có muốn xóa !")
         b1 = Button(popup, text="OK",width=7, command= lambda: OK(Listbox))
         b2 = Button(popup, text="Cancle",width=7, command=Cancle)
-        l1.pack()
+        l1.place(relx=0.25, rely=0.2)
         b1.place(relx=0.18, rely=0.6)
         b2.place(relx=0.52, rely=0.6)
         popup.mainloop()
     else:
-        tkMessageBox.showinfo("Error", "Vui long chon doi tuong")
+        tkMessageBox.showinfo("Error", "Vui lòng chọn đối tượng")

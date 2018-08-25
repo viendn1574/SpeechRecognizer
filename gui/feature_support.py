@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 import csv
 import numpy
 import os
@@ -51,10 +52,10 @@ def Record_click(event,label1):
     global add
     if add > 0:
         if add < 9:
-            label1.configure(text="Add lan thu %d" %add)
+            label1.configure(text="Thêm lần thứ %d" %add)
 
         else:
-            label1.configure(text="Add lan cuoi")
+            label1.configure(text="Thêm lần cuối cùng")
 
     if add == 0:
         label1.configure(text="")
@@ -78,20 +79,20 @@ def Record_release(event,Label1):
         print(result)
         if result >= 1:
             name= getNamePerson(int(result))
-            Label1.configure(text="Xin chao %s"%name)
+            Label1.configure(text="Xin chào %s"%name)
         if result == 0:
-            Label1.configure(text="Xin thu lai")
+            Label1.configure(text="Xin thử lại lai")
         if result == -1:
-            Label1.configure(text="Ban noi nhanh qua")
+            Label1.configure(text="Bạn nói nhanh quá")
 
     if add > 0:
         features=extract_features.extract_features('nonblocking.wav')
         if len(features)>0:
             data1.extend(features)
-            Label1.configure(text="Add thanh cong lan %d" %add)
+            Label1.configure(text="Thêm thành công lần %d" %add)
             add +=1
         else:
-            Label1.configure(text="Add khong thanh cong lan %d, ban noi qua nhanh" %add)
+            Label1.configure(text="Thêm không thành công lần %d, bạn nói nhanh quá." %add)
     if add==9:
         number_person=0
         with open('./data/list_person.txt','a') as lpfile:

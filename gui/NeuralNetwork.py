@@ -61,7 +61,7 @@ def compute(a):
             print activate
         print result_person
         print result_person[1]/len(a)
-        if result_person[1]/len(a) >= 0.7:
+        if result_person[1]/len(a) >= 0.9:
             result_allperson[person_count]=result_person[1]/len(a)
     print result_allperson
     if max(result_allperson) >= 0.7:
