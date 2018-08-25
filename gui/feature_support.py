@@ -81,7 +81,7 @@ def Record_release(event,Label1):
             name= getNamePerson(int(result))
             Label1.configure(text="Xin chào %s"%name)
         if result == 0:
-            Label1.configure(text="Xin thử lại lai")
+            Label1.configure(text="Xin thử lại")
         if result == -1:
             Label1.configure(text="Bạn nói nhanh quá")
 
