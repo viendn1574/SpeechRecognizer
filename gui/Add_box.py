@@ -23,6 +23,7 @@ from Tkinter import *
 import tkMessageBox
 import GUI_Builder
 import feature_support
+import Add_box
 
 # -- Declaration of font styles --- #
 font_title = ("Helvetica", 18, "bold")
@@ -32,6 +33,7 @@ font_vKeyboard = ("Helvetica", 10)
 font_vKeyboardSpecialKeys = ("Helvetica", 10, "bold")
 
 # -- GUI's main class -- #
+Add_box.object=None
 class GUI(tk.Tk):
     def __init__(self, *args, **kwargs):
         tk.Tk.__init__(self, *args, **kwargs)
@@ -45,15 +47,14 @@ class GUI(tk.Tk):
 
         self.frames = {}
 
-        for F in (StartPage, SecondPage):
-            page_name = F.__name__
-            frame = F(parent=container, controller=self)
-            self.frames[page_name] = frame
+        F=StartPage
+        page_name = F.__name__
+        frame = F(parent=container, controller=self)
+        self.frames[page_name] = frame
 
-            frame.grid(row=0, column=0, sticky="nsew")
-
+        frame.grid(row=0, column=0, sticky="nsew")
         self.showFrame("StartPage")
-
+        Add_box.object=self
 
     def showFrame(self, page_name):
         frame = self.frames[page_name]
@@ -79,10 +80,8 @@ class StartPage(ttk.Frame):
         #self.entry2 = ttk.Entry(self)
         #self.entry2.pack(side="top")
 
-        self.frame1 = ttk.Frame(self, width=480, height=280)
-        self.frame1.pack(side="top", pady=30)
-        self.frame2 = ttk.Frame(self, width=480, height=280)
-        self.frame2.pack(side="top", pady=30)
+        self.frame1 = ttk.Frame(self, width=480, height=320)
+        self.frame1.pack(side="top", pady=30,padx=15)
 
         self.keysize = 4
         self.controller = controller
@@ -101,11 +100,10 @@ class StartPage(ttk.Frame):
 
     def show_vKeyboard(self):
         self.frame1.destroy()
-        self.frame2.destroy()
         self.kb.destroy()
 
-        self.frame1 = ttk.Frame(self, width=480, height=280)
-        self.frame1.pack(side="top", pady=30)
+        self.frame1 = ttk.Frame(self, width=480, height=320)
+        self.frame1.pack(side="top", pady=30,padx=15)
         self.kb = vKeyboard(parentPage=self,
                             attach=self.entry1,
                             x=self.entry1.winfo_rootx(),
@@ -117,13 +115,6 @@ class StartPage(ttk.Frame):
 
     def get_entry(self):
         return self.entry1
-
-class SecondPage(ttk.Frame):
-    def __init__(self, parent, controller):
-        ttk.Frame.__init__(self, parent)
-        label1 = ttk.Label(self, text="Example Page 2", font=font_title)
-        label1.pack(side="top", fill="x", pady=7, padx=10)
-
 class vKeyboard(ttk.Frame):
     # --- A frame for the keyboard(s) itself --- #
     def __init__(self, parentPage, parent, attach, x, y, keysize, controller, enterAction):
@@ -336,28 +327,19 @@ class vKeyboard(ttk.Frame):
             self.attach.insert(0, self.remaining)
         elif k == 'ENTER':
             print('feature_support.OK_click')
-            #u1 = t1.get()
+            u1 = self.attach.get()
             with open('./data/list_person.txt', 'r') as lpfile:
                 person_count = sum(1 for person in lpfile)
                 with open('person_temp.txt', 'w') as pfile:
-                    #pfile.write("%s %s" % (person_count + 1, u1))
+                    pfile.write("%s %s" % (person_count + 1, u1))
                     pfile.close()
                 lpfile.close()
             GUI_Builder.top.Button1.config(state=NORMAL)
             self.parentPage.destroy()
             #root.destroy()
             feature_support.add += 1
-            # t1, t2 = self.parentPage.get_entry()
-            # u1 = t1.get()
-            # u2 = t2.get()
-            # print('feature_support.Enter_click')
-            # if u1 == '1' and u2 == '1':
-            #     tkMessageBox.showinfo("Valid", "Log in Sucessfully")
-            #
-            # elif u1 != '1' or u2 != '1':
-            #     tkMessageBox.showinfo("Invalid", "Wrong User or Password ,try again")
-            #pass                                    # Define, what's supposed to happen..
-            #self.controller.enter_cb(self.enterAction)
+            Add_box.object.destroy()
+
         elif k == 'BACK':
             self.controller.showFrame("StartPage")  # Or any other page...
         elif k == '[ space ]':

@@ -23,7 +23,7 @@ from Tkinter import *
 import feature_support
 import tkMessageBox
 import GUI_Builder
-
+import Login
 # -- Declaration of font styles --- #
 font_title = ("Helvetica", 18, "bold")
 font_message = ("Helvetica", 14)
@@ -32,6 +32,7 @@ font_vKeyboard = ("Helvetica", 10)
 font_vKeyboardSpecialKeys = ("Helvetica", 10, "bold")
 
 # -- GUI's main class -- #
+Login.object=None
 class GUI(tk.Tk):
     def __init__(self, *args, **kwargs):
         tk.Tk.__init__(self, *args, **kwargs)
@@ -45,15 +46,15 @@ class GUI(tk.Tk):
 
         self.frames = {}
 
-        for F in (StartPage, SecondPage):
-            page_name = F.__name__
-            frame = F(parent=container, controller=self)
-            self.frames[page_name] = frame
+        F=StartPage
+        page_name = F.__name__
+        frame = F(parent=container, controller=self)
+        self.frames[page_name] = frame
 
-            frame.grid(row=0, column=0, sticky="nsew")
+        frame.grid(row=0, column=0, sticky="nsew")
 
         self.showFrame("StartPage")
-
+        Login.object=self
 
     def showFrame(self, page_name):
         frame = self.frames[page_name]
@@ -64,9 +65,6 @@ class StartPage(ttk.Frame):
         ttk.Frame.__init__(self, parent)
         label1 = ttk.Label(self, text="Login Page", font=font_title)
         label1.pack(side="top", fill="x", pady=7, padx=10)
-
-        #self.buttonLogin = buttonLogin
-        #self.buttonList = buttonList
 
         self.label1 = ttk.Label(self, text="User name:", font=font_message)
         self.label1.pack(side="top")
@@ -80,10 +78,8 @@ class StartPage(ttk.Frame):
         self.entry2 = ttk.Entry(self, show="*")
         self.entry2.pack(side="top")
 
-        self.frame1 = ttk.Frame(self, width=480, height=280)
-        self.frame1.pack(side="top", pady=30)
-        self.frame2 = ttk.Frame(self, width=480, height=280)
-        self.frame2.pack(side="top", pady=30)
+        self.frame1 = ttk.Frame(self, width=480, height=320)
+        self.frame1.pack(side="top", pady=30,padx=15)
 
         self.keysize = 4
         self.controller = controller
@@ -104,11 +100,10 @@ class StartPage(ttk.Frame):
     def show_vKeyboard(self, k):
         if k == 1:
             self.frame1.destroy()
-            self.frame2.destroy()
             self.kb.destroy()
 
-            self.frame1 = ttk.Frame(self, width=480, height=280)
-            self.frame1.pack(side="top", pady=30)
+            self.frame1 = ttk.Frame(self, width=480, height=320)
+            self.frame1.pack(side="top", pady=30,padx=15)
             self.kb = vKeyboard( parentPage = self,
                                  attach=self.entry1,
                                  x=self.entry1.winfo_rootx(),
@@ -120,28 +115,21 @@ class StartPage(ttk.Frame):
 
         elif k == 2:
             self.frame1.destroy()
-            self.frame2.destroy()
             self.kb.destroy()
 
-            self.frame2 = ttk.Frame(self, width=480, height=280)
-            self.frame2.pack(side="top", pady=30)
+            self.frame1 = ttk.Frame(self, width=480, height=320)
+            self.frame1.pack(side="top", pady=30,padx=15)
             self.kb = vKeyboard( parentPage = self,
                                  attach=self.entry2,
                                  x=self.entry2.winfo_rootx(),
                                  y=self.entry2.winfo_rooty() + self.entry2.winfo_reqheight(),
                                  keysize=self.keysize,
-                                 parent=self.frame2,
+                                 parent=self.frame1,
                                  controller=self.controller,
                                  enterAction=self.enterAction)
 
     def get_entry(self):
         return self.entry1, self.entry2
-
-class SecondPage(ttk.Frame):
-    def __init__(self, parent, controller):
-        ttk.Frame.__init__(self, parent)
-        label1 = ttk.Label(self, text="Example Page 2", font=font_title)
-        label1.pack(side="top", fill="x", pady=7, padx=10)
 
 class vKeyboard(ttk.Frame):
     # --- A frame for the keyboard(s) itself --- #
@@ -357,13 +345,11 @@ class vKeyboard(ttk.Frame):
             self.attach.delete(0, tk.END)
             self.attach.insert(0, self.remaining)
         elif k == 'ENTER':
-            self.parentPage.grab_release()
+            #self.parentPage.grab_release()
             t1,t2 = self.parentPage.get_entry()
             u1 = t1.get()
             u2 = t2.get()
-            #popup = Toplevel()
-            #popup.resizable(False, False)
-            #popup.geometry("200x150+700+300")
+
             print('feature_support.Enter_click')
             if u1 == '1' and u2 == '1':
                 #global login
@@ -373,37 +359,18 @@ class vKeyboard(ttk.Frame):
                 #self.buttonLogin.configure(text="Log out")
                 #self.buttonList.config(state=NORMAL)
                 tkMessageBox.showinfo("Valid", "Log in Sucessfully")
-                #popup.grab_release()
-                #popup.destroy()
-                #self.parentPage.grab_release()
                 self.parentPage.destroy()
+                Login.object.destroy()
 
             elif u1 != '1' or u2 != '1':
                 tkMessageBox.showinfo("Invalid", "Wrong User or Password ,try again")
 
-            #self.parentPage.wm_title("Login")
-            # l1 = Label(self.parentPage, text="User")
-            # l2 = Label(self.parentPage, text="Password")
-            # t1 = Entry(self.parentPage, textvariable="")
-            # t2 = Entry(self.parentPage, show="*", textvariable="")
-            #b1 = Button(self.parentPage, text="OK", width=7, command=lambda: OK(t1, t2, buttonLogin, buttonList))
-            #b2 = Button(self.parentPage, text="Cancle", width=7, command=Cancle)
-            # l1.pack()
-            # t1.pack()
-            # l2.pack()
-            # t2.pack()
-            #b1.place(relx=0.18, rely=0.6)
-            #b2.place(relx=0.52, rely=0.6)
-            self.parentPage.grab_set()
-            #pass                                    # Define, what's supposed to happen..
-            #self.controller.enter_cb(self.enterAction)
+
+
+
         elif k == 'BACK':
             self.controller.showFrame("StartPage")  # Or any other page...
         elif k == '[ space ]':
             self.attach.insert(tk.END, ' ')
         else:
             self.attach.insert(tk.END, k)
-
-if __name__ == "__main__":
-    app = GUI()
-    app.mainloop()
