@@ -20,7 +20,6 @@ vKeyboard is based upon tkinter-keyboard by petemojeiko
 import Tkinter as tk
 import ttk
 from Tkinter import *
-import tkMessageBox
 import GUI_Builder
 import feature_support
 import Add_box
@@ -34,9 +33,9 @@ font_vKeyboardSpecialKeys = ("Helvetica", 10, "bold")
 
 # -- GUI's main class -- #
 Add_box.object=None
-class GUI(tk.Tk):
-    def __init__(self, *args, **kwargs):
-        tk.Tk.__init__(self, *args, **kwargs)
+class GUI(Toplevel):
+    def __init__(self, root):
+        Toplevel.__init__(self)
 
         container = ttk.Frame(self, width=480, height=320)
         container.grid_propagate(0)
@@ -49,20 +48,24 @@ class GUI(tk.Tk):
 
         F=StartPage
         page_name = F.__name__
-        frame = F(parent=container, controller=self)
+        frame = F(parent=container, controller=self, root=root)
         self.frames[page_name] = frame
 
         frame.grid(row=0, column=0, sticky="nsew")
         self.showFrame("StartPage")
         Add_box.object=self
+        self.grab_set()
 
     def showFrame(self, page_name):
         frame = self.frames[page_name]
         frame.tkraise()
 
 class StartPage(ttk.Frame):
-    def __init__(self, parent, controller):
+    def __init__(self, parent, controller, root):
         ttk.Frame.__init__(self, parent)
+
+        self.root = root
+
         label1 = ttk.Label(self, text="Edit", font=font_title)
         label1.pack(side="top", fill="x", pady=7, padx=10)
 
@@ -96,7 +99,8 @@ class StartPage(ttk.Frame):
                             keysize=self.keysize,
                             parent=self.frame1,
                             controller=self.controller,
-                            enterAction=self.enterAction)
+                            enterAction=self.enterAction,
+                            root = self.root)
 
     def show_vKeyboard(self):
         self.frame1.destroy()
@@ -111,13 +115,14 @@ class StartPage(ttk.Frame):
                             keysize=self.keysize,
                             parent=self.frame1,
                             controller=self.controller,
-                            enterAction=self.enterAction)
+                            enterAction=self.enterAction,
+                            root = self.root)
 
     def get_entry(self):
         return self.entry1
 class vKeyboard(ttk.Frame):
     # --- A frame for the keyboard(s) itself --- #
-    def __init__(self, parentPage, parent, attach, x, y, keysize, controller, enterAction):
+    def __init__(self, parentPage, parent, attach, x, y, keysize, controller, enterAction, root):
         ttk.Frame.__init__(self, takefocus=0)
 
         self.attach = attach
@@ -128,6 +133,7 @@ class vKeyboard(ttk.Frame):
         self.controller = controller
         self.enterAction = enterAction
         self.parentPage = parentPage
+        self.root = root
 
     # --- Different sub-keyboards (e.g. alphabet, symbols..) --- #
         # --- Lowercase alphabet sub-keyboard --- #
@@ -326,7 +332,7 @@ class vKeyboard(ttk.Frame):
             self.attach.delete(0, tk.END)
             self.attach.insert(0, self.remaining)
         elif k == 'ENTER':
-            print('feature_support.OK_click')
+            print('feature_support.Enter_click')
             u1 = self.attach.get()
             with open('./data/list_person.txt', 'r') as lpfile:
                 person_count = sum(1 for person in lpfile)
@@ -335,8 +341,8 @@ class vKeyboard(ttk.Frame):
                     pfile.close()
                 lpfile.close()
             GUI_Builder.top.Button1.config(state=NORMAL)
-            self.parentPage.destroy()
-            #root.destroy()
+            #self.parentPage.destroy()
+            self.root.destroy()
             feature_support.add += 1
             Add_box.object.destroy()
 

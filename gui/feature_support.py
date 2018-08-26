@@ -11,6 +11,7 @@ import Management
 import GUI_Builder
 import Login
 
+login = False
 feature_support.add=0
 
 def List_click():
@@ -132,8 +133,17 @@ def CancleAdd_click():
 
 def Login_click(buttonLogin,buttonList):
     print('feature_support.Login_click')
-    #Login_box.popuplogin(buttonLogin,buttonList)
-    Login.GUI()
+    global login
+    if login == False:
+        login = True
+        #Login_box.popuplogin(buttonLogin,buttonList)
+        Login.GUI()
+    else:
+        login = False
+        buttonLogin.configure(text="Log in")
+        buttonList.config(state=DISABLED)
+        if feature_support.add>0:
+            feature_support.CancleAdd_click()
     sys.stdout.flush()
 
 def init(top, gui, *args, **kwargs):

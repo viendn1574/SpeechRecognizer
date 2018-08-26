@@ -22,7 +22,8 @@ import ttk
 from Tkinter import *
 import tkMessageBox
 import GUI_Builder
-import Login
+import feature_support
+import Edit_box
 
 # -- Declaration of font styles --- #
 font_title = ("Helvetica", 18, "bold")
@@ -32,10 +33,10 @@ font_vKeyboard = ("Helvetica", 10)
 font_vKeyboardSpecialKeys = ("Helvetica", 10, "bold")
 
 # -- GUI's main class -- #
-Login.object=None
+Edit_box.object=None
 class GUI(Toplevel):
-    def __init__(self, *args, **kwargs):
-        Toplevel.__init__(self, *args, **kwargs)
+    def __init__(self, root, Listbox):
+        Toplevel.__init__(self)
 
         container = ttk.Frame(self, width=480, height=320)
         container.grid_propagate(0)
@@ -48,13 +49,12 @@ class GUI(Toplevel):
 
         F=StartPage
         page_name = F.__name__
-        frame = F(parent=container, controller=self)
+        frame = F(parent=container, controller=self, root=root, Listbox=Listbox)
         self.frames[page_name] = frame
 
         frame.grid(row=0, column=0, sticky="nsew")
-
         self.showFrame("StartPage")
-        Login.object=self
+        Edit_box.object=self
         self.grab_set()
 
     def showFrame(self, page_name):
@@ -62,22 +62,28 @@ class GUI(Toplevel):
         frame.tkraise()
 
 class StartPage(ttk.Frame):
-    def __init__(self, parent, controller):
+    def __init__(self, parent, controller, root, Listbox):
         ttk.Frame.__init__(self, parent)
-        label1 = ttk.Label(self, text="Login Page", font=font_title)
+
+        self.root = root
+        self.Listbox = Listbox
+
+        label1 = ttk.Label(self, text="Edit", font=font_title)
         label1.pack(side="top", fill="x", pady=7, padx=10)
 
-        self.label1 = ttk.Label(self, text="User name:", font=font_message)
+        self.label1 = ttk.Label(self, text="Enter the name:", font=font_message)
         self.label1.pack(side="top")
         self.entry1 = ttk.Entry(self)
         self.entry1.pack(side="top")
 
         self.label0 = ttk.Label(self, text="  ", font=font_message)
         self.label0.pack(side="top")
-        self.label2 = ttk.Label(self, text="Password:", font=font_message)
+        self.label2 = ttk.Label(self, text="  ", font=font_message)
         self.label2.pack(side="top")
-        self.entry2 = ttk.Entry(self, show="*")
-        self.entry2.pack(side="top")
+        #self.label2 = ttk.Label(self, text="Password:", font=font_message)
+        #self.label2.pack(side="top")
+        #self.entry2 = ttk.Entry(self)
+        #self.entry2.pack(side="top")
 
         self.frame1 = ttk.Frame(self, width=480, height=320)
         self.frame1.pack(side="top", pady=30,padx=15)
@@ -86,55 +92,41 @@ class StartPage(ttk.Frame):
         self.controller = controller
         self.enterAction = "StartPage"
 
-        self.entry1.bind("<FocusIn>", lambda e:  self.show_vKeyboard(1))
-        self.entry2.bind("<FocusIn>", lambda e:  self.show_vKeyboard(2))
+        self.entry1.bind("<FocusIn>", lambda e:  self.show_vKeyboard())
 
-        self.kb = vKeyboard(parentPage = self,
+        self.kb = vKeyboard(parentPage=self,
                             attach=self.entry1,
                             x=self.entry1.winfo_rootx(),
                             y=self.entry1.winfo_rooty() + self.entry1.winfo_reqheight(),
                             keysize=self.keysize,
                             parent=self.frame1,
                             controller=self.controller,
-                            enterAction=self.enterAction)
+                            enterAction=self.enterAction,
+                            root=self.root,
+                            Listbox=self.Listbox)
 
-    def show_vKeyboard(self, k):
-        if k == 1:
-            self.frame1.destroy()
-            self.kb.destroy()
+    def show_vKeyboard(self):
+        self.frame1.destroy()
+        self.kb.destroy()
 
-            self.frame1 = ttk.Frame(self, width=480, height=320)
-            self.frame1.pack(side="top", pady=30,padx=15)
-            self.kb = vKeyboard( parentPage = self,
-                                 attach=self.entry1,
-                                 x=self.entry1.winfo_rootx(),
-                                 y=self.entry1.winfo_rooty() + self.entry1.winfo_reqheight(),
-                                 keysize=self.keysize,
-                                 parent=self.frame1,
-                                 controller=self.controller,
-                                 enterAction=self.enterAction)
-
-        elif k == 2:
-            self.frame1.destroy()
-            self.kb.destroy()
-
-            self.frame1 = ttk.Frame(self, width=480, height=320)
-            self.frame1.pack(side="top", pady=30,padx=15)
-            self.kb = vKeyboard( parentPage = self,
-                                 attach=self.entry2,
-                                 x=self.entry2.winfo_rootx(),
-                                 y=self.entry2.winfo_rooty() + self.entry2.winfo_reqheight(),
-                                 keysize=self.keysize,
-                                 parent=self.frame1,
-                                 controller=self.controller,
-                                 enterAction=self.enterAction)
+        self.frame1 = ttk.Frame(self, width=480, height=320)
+        self.frame1.pack(side="top", pady=30,padx=15)
+        self.kb = vKeyboard(parentPage=self,
+                            attach=self.entry1,
+                            x=self.entry1.winfo_rootx(),
+                            y=self.entry1.winfo_rooty() + self.entry1.winfo_reqheight(),
+                            keysize=self.keysize,
+                            parent=self.frame1,
+                            controller=self.controller,
+                            enterAction=self.enterAction,
+                            root=self.root,
+                            Listbox=self.Listbox)
 
     def get_entry(self):
-        return self.entry1, self.entry2
-
+        return self.entry1
 class vKeyboard(ttk.Frame):
     # --- A frame for the keyboard(s) itself --- #
-    def __init__(self, parentPage, parent, attach, x, y, keysize, controller, enterAction):
+    def __init__(self, parentPage, parent, attach, x, y, keysize, controller, enterAction, root, Listbox):
         ttk.Frame.__init__(self, takefocus=0)
 
         self.attach = attach
@@ -145,9 +137,8 @@ class vKeyboard(ttk.Frame):
         self.controller = controller
         self.enterAction = enterAction
         self.parentPage = parentPage
-        #self.buttonLogin = buttonLogin
-        #self.buttonList = buttonList
-
+        self.root = root
+        self.Listbox = Listbox
 
     # --- Different sub-keyboards (e.g. alphabet, symbols..) --- #
         # --- Lowercase alphabet sub-keyboard --- #
@@ -346,28 +337,28 @@ class vKeyboard(ttk.Frame):
             self.attach.delete(0, tk.END)
             self.attach.insert(0, self.remaining)
         elif k == 'ENTER':
-            t1,t2 = self.parentPage.get_entry()
-            u1 = t1.get()
-            u2 = t2.get()
-
             print('feature_support.Enter_click')
-            if u1 == '1' and u2 == '1':
-                #global login
-                #login = True
-                GUI_Builder.top.Button3.configure(text="Log out")
-                GUI_Builder.top.Button4.config(state=NORMAL)
-                #self.buttonLogin.configure(text="Log out")
-                #self.buttonList.config(state=NORMAL)
-                tkMessageBox.showinfo("Valid", "Log in Sucessfully")
-                #self.parentPage.destroy()
-                Login.object.grab_release()
-                Login.object.destroy()
-
-            elif u1 != '1' or u2 != '1':
-                tkMessageBox.showinfo("Invalid", "Wrong User or Password ,try again")
-
-
-
+            u1 = self.attach.get()
+            newrow = []
+            selected = self.Listbox.get(ACTIVE)
+            with open('./data/list_person.txt', 'r') as lpfile:
+                for person in lpfile:
+                    row = person.split()
+                    if (row != []):
+                        if (int(row[0]) == int(selected[0])):
+                            row[1] = u1
+                        newrow.append(row)
+            with open('./data/list_person.txt', 'wb') as lpfile:
+                i = 0
+                for row in newrow:
+                    self.Listbox.delete(i)
+                    self.Listbox.insert(i, "%d ----- %s" % (int(row[0]), row[1]))
+                    lpfile.write("%s %s\n"%(row[0],row[1]))
+                    i += 1
+            self.Listbox.update()
+            #self.parentPage.destroy()
+            self.root.grab_set()
+            Edit_box.object.destroy()
 
         elif k == 'BACK':
             self.controller.showFrame("StartPage")  # Or any other page...
@@ -375,3 +366,7 @@ class vKeyboard(ttk.Frame):
             self.attach.insert(tk.END, ' ')
         else:
             self.attach.insert(tk.END, k)
+
+if __name__ == "__main__":
+    app = GUI()
+    app.mainloop()
