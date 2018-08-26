@@ -11,6 +11,7 @@ import feature_support
 import Management
 import GUI_Builder
 
+feature_support.login = False
 feature_support.add=0
 
 def List_click():
@@ -27,11 +28,11 @@ def List_click():
     bDel.place(relx=0.7, rely=0.05)
     Lb=Listbox(root,width=45)
     Lb.place(relx=0.05, rely=0.2)
-    with open('./data/list_person.txt','r') as lpfile:
+    with open('./data/list_person.txt','rb') as lpfile:
         for person in lpfile:
             row=person.split()
             if (row != []):
-                Lb.insert(END,"%d ----- %s"%(int(row[0]),row[1]) )
+                Lb.insert(END,"%s ----- %s"%(row[0],row[1]) )
     root.mainloop()
     sys.stdout.flush()
 
@@ -49,15 +50,14 @@ def Record_click(event,label1):
     global recfile2
     recfile2= rec.open('nonblocking.wav', 'wb')
     print('feature_support.Record_click')
-    global add
-    if add > 0:
-        if add < 9:
+    if feature_support.add > 0:
+        if feature_support.add < 9:
             label1.configure(text="Thêm lần thứ %d" %add)
 
         else:
             label1.configure(text="Thêm lần cuối cùng")
 
-    if add == 0:
+    if feature_support.add == 0:
         label1.configure(text="")
 
     recfile2.start_recording()
@@ -70,9 +70,8 @@ def Record_release(event,Label1):
     global recfile2
     recfile2.stop_recording()
     recfile2.close()
-    global add
     global data1
-    if add==0:
+    if feature_support.add==0:
         features=extract_features.extract_features('nonblocking.wav')
         result=NeuralNetwork.compute(features)
 
@@ -85,15 +84,15 @@ def Record_release(event,Label1):
         if result == -1:
             Label1.configure(text="Bạn nói nhanh quá")
 
-    if add > 0:
+    if feature_support.add > 0:
         features=extract_features.extract_features('nonblocking.wav')
         if len(features)>0:
             data1.extend(features)
-            Label1.configure(text="Thêm thành công lần %d" %add)
-            add +=1
+            Label1.configure(text="Thêm thành công lần %d" %feature_support.add)
+            feature_support.add +=1
         else:
-            Label1.configure(text="Thêm không thành công lần %d, bạn nói nhanh quá." %add)
-    if add==9:
+            Label1.configure(text="Thêm không thành công lần %d, bạn nói nhanh quá." %feature_support.add)
+    if feature_support.add==9:
         number_person=0
         with open('./data/list_person.txt','a') as lpfile:
             with open('person_temp.txt','r') as ptemp:
@@ -132,7 +131,14 @@ def CancleAdd_click():
 
 def Login_click(buttonLogin,buttonList):
     print('feature_support.Login_click')
-    Login_box.popuplogin(buttonLogin,buttonList)
+    if feature_support.login == False:
+        Login_box.GUI()
+    else:
+        feature_support.login = False
+        buttonLogin.configure(text="Log in")
+        buttonList.config(state=DISABLED)
+        if feature_support.add>0:
+            feature_support.CancleAdd_click()
     sys.stdout.flush()
 
 def init(top, gui, *args, **kwargs):
