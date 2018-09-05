@@ -1,13 +1,15 @@
-import time
+import gc
+from cookielib import logger
 
+import pygame
 import GUI_Builder
 import Tkinter
 from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
-from matplotlib.figure import Figure
+import matplotlib.pyplot as plt
 import feature_support
 import NeuralNetwork
 
-GUI_Builder.top=None
+GUI_Builder.object=None
 def vp_start_gui():
     '''Starting point when module is the main routine.'''
     with open('./data/list_person.txt','r') as lpfile:
@@ -17,8 +19,7 @@ def vp_start_gui():
             #NeuralNetwork.init_dataset()
     root = Tkinter.Tk()
     root.resizable(False,False)
-    GUI_Builder.top = New_Toplevel (root)
-    feature_support.init(root, GUI_Builder.top)
+    GUI_Builder.object = New_Toplevel (root)
     root.mainloop()
 
 
@@ -107,32 +108,41 @@ class New_Toplevel:
         self.Button2.configure(text='''Record''')
         self.Button2.bind('<ButtonPress-1>',lambda event, Label1=self.Label1:  feature_support.Record_click(event,Label1))
         self.Button2.bind('<ButtonRelease-1>',lambda event, Label1=self.Label1: feature_support.Record_release(event,Label1))
-        self.f = Figure( figsize=(10, 9), dpi=80 )
+        self.f = plt.figure( figsize=(10, 9), dpi=80 )
         self.canvas = FigureCanvasTkAgg(self.f, master=self.Frame1)
         self.canvas.get_tk_widget().pack(side=Tkinter.TOP, fill=Tkinter.BOTH, expand=1)
-        self.top=top
-        self.update_clock(top)
+        self.root=top
+        self.update_clock()
 
 
     def canvas_show(self,sig,mfcc):
-        self.top.after_cancel(self.afterid)
-        self.f.clf()
-        a = self.f.add_subplot(2,1,1)
+        self.root.after_cancel(self.afterid)
+        a = self.f.add_subplot(211)
         a.plot(sig)
-        b =self.f.add_subplot(2,1,2)
+        b = self.f.add_subplot(212)
         b.plot(mfcc)
-        self.canvas.show()
-        self.afterid=self.top.after(5000, lambda top1=self.top :self.update_clock(top1))
+        self.canvas.draw()
+        self.afterid=self.root.after(5000,self.update_clock)
 
+    def update_clock(self):
 
-    def update_clock(self,top):
-        now = time.strftime("%H:%M:%S")
         self.Label1.configure(text="")
         self.f.clf()
-        self.canvas.show()
-        self.afterid= top.after(5000, lambda top1=top :self.update_clock(top1))
-if __name__ == '__main__':
+        plt.clf()
+        plt.close('all')
+        self.canvas.draw()
+        active = pygame.mixer.get_init()
 
+        if active != None:
+            while pygame.mixer.music.get_busy():
+                pygame.time.Clock().tick(10)
+            pygame.mixer.music.stop()
+            pygame.mixer.quit()
+            pygame.quit()
+        gc.collect()
+
+        self.afterid= self.root.after(5000,self.update_clock)
+if __name__ == '__main__':
     vp_start_gui()
 
 
