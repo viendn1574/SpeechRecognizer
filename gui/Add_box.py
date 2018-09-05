@@ -377,10 +377,10 @@ class vKeyboard(ttk.Frame):
         elif k == 'ENTER':
             print('feature_support.Enter_click')
             u1 = self.attach.get()
-            with open('./data/list_person.txt', 'r') as lpfile:
+            with open('./data/list_person.txt', 'rb') as lpfile:
                 person_count = sum(1 for person in lpfile)
-                with open('person_temp.txt', 'w') as pfile:
-                    pfile.write("%s %s" % (person_count + 1, u1))
+                with open('person_temp.txt', 'wb') as pfile:
+                    pfile.write("%s %s" % (str(person_count + 1).encode('utf-8'), u1.encode('utf-8')))
                     pfile.close()
                 lpfile.close()
             GUI_Builder.top.Button1.config(state=NORMAL)

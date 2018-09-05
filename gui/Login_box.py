@@ -5,6 +5,7 @@ import GUI_Builder
 import Login_box
 import feature_support
 
+
 # -- Declaration of font styles --- #
 font_title = ("Helvetica", 18, "bold")
 font_message = ("Helvetica", 14)
@@ -33,7 +34,7 @@ class GUI(Toplevel):
         self.frames[page_name] = frame
 
         frame.grid(row=0, column=0, sticky="nsew")
-
+        self.geometry("%dx%d+%d+%d"%(480,320,0,0))
         self.showFrame("LoginPage")
         Login_box.object=self
         self.grab_set()
@@ -321,8 +322,8 @@ class vKeyboard(ttk.Frame):
 
             print('feature_support.Enter_click')
             if u1 == '1' and u2 == '1':
-                GUI_Builder.top.Button3.configure(text="Log out")
-                GUI_Builder.top.Button4.config(state=NORMAL)
+                GUI_Builder.object.Button3.configure(text="Log out")
+                GUI_Builder.object.Button4.config(state=NORMAL)
                 tkMessageBox.showinfo("Valid", "Log in Sucessfully")
                 feature_support.login=True
                 self.parentPage.destroy()

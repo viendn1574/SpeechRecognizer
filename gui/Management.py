@@ -38,6 +38,7 @@ def Delete_click(root,Listbox):
 
             newrow=[]
             selected=Listbox.get(ACTIVE)
+            os.remove("./data/%s.mp3"%selected.split(' ----- ')[1])
             for line in fileinput.input("./data/database.csv", inplace=True):
                 if line=='\n':
                     continue
