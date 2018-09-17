@@ -1,22 +1,13 @@
 import gc
-<<<<<<< HEAD
-=======
-from cookielib import logger
->>>>>>> e08032aa9289f2cc6861ce7125d6713eeef22da9
 
 import pygame
 import GUI_Builder
 import Tkinter
-<<<<<<< HEAD
 import matplotlib
 matplotlib.use('TkAgg')
 
 from matplotlib.figure import Figure
 from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
-=======
-from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
-import matplotlib.pyplot as plt
->>>>>>> e08032aa9289f2cc6861ce7125d6713eeef22da9
 import feature_support
 import NeuralNetwork
 
@@ -119,7 +110,6 @@ class New_Toplevel:
         self.Button2.configure(text='''Record''')
         self.Button2.bind('<ButtonPress-1>',lambda event, Label1=self.Label1:  feature_support.Record_click(event,Label1))
         self.Button2.bind('<ButtonRelease-1>',lambda event, Label1=self.Label1: feature_support.Record_release(event,Label1))
-<<<<<<< HEAD
         self.f = Figure( figsize=(10, 9), dpi=80 )
         self.a = self.f.add_subplot(211)
         self.b =self.f.add_subplot(212)
@@ -128,18 +118,10 @@ class New_Toplevel:
         self.canvas.get_tk_widget().pack(side=Tkinter.TOP, fill=Tkinter.BOTH, expand=1)
         self.root=top
         self.afterid= self.root.after(5000,self.update_clock)
-=======
-        self.f = plt.figure( figsize=(10, 9), dpi=80 )
-        self.canvas = FigureCanvasTkAgg(self.f, master=self.Frame1)
-        self.canvas.get_tk_widget().pack(side=Tkinter.TOP, fill=Tkinter.BOTH, expand=1)
-        self.root=top
-        self.update_clock()
->>>>>>> e08032aa9289f2cc6861ce7125d6713eeef22da9
 
 
     def canvas_show(self,sig,mfcc):
         self.root.after_cancel(self.afterid)
-<<<<<<< HEAD
 
         self.f.add_axes(self.a)
         self.f.add_axes(self.b)
@@ -151,24 +133,10 @@ class New_Toplevel:
         self.afterid=self.root.after(5000,self.update_clock)
         gc.collect()
         return
-=======
-        a = self.f.add_subplot(211)
-        a.plot(sig)
-        b = self.f.add_subplot(212)
-        b.plot(mfcc)
-        self.canvas.draw()
-        self.afterid=self.root.after(5000,self.update_clock)
-
->>>>>>> e08032aa9289f2cc6861ce7125d6713eeef22da9
     def update_clock(self):
 
         self.Label1.configure(text="")
         self.f.clf()
-<<<<<<< HEAD
-=======
-        plt.clf()
-        plt.close('all')
->>>>>>> e08032aa9289f2cc6861ce7125d6713eeef22da9
         self.canvas.draw()
         active = pygame.mixer.get_init()
 
