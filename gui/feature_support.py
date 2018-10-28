@@ -139,27 +139,22 @@ def Record_release(event,Label1):
                 tts.save("./data/%s.mp3"%person.split()[1].decode('utf-8'))
                 ptemp.close()
             lpfile.close()
-        with open('./data/database.csv','a') as csvdata:
-            writer =csv.writer(csvdata,delimiter=' ')
-            for i in range(0,len(data1)):
-                data1[i]=numpy.append([1],data1[i])
-                a=list(data1[i])
-                a[0]=int(number_person)
-                writer.writerow(a,)
+        for i in range(0,len(data1)):
+            data1[i]=numpy.append([1],data1[i])
         NeuralNetwork.add_model(data1)
         data1 = []
         feature_support.add = 0
         Label1.configure(text="")
         os.remove('person_temp.txt')
-        GUI_Builder.top.Button1.config(state=DISABLED)
+        GUI_Builder.object.Button1.config(state=DISABLED)
 
-    os.remove('nonblocking.wav')
-    os.remove('nonblocking_filtered.wav')
+    #os.remove('nonblocking.wav')
+    #os.remove('nonblocking_filtered.wav')
     sys.stdout.flush()
 
 
 def CancleAdd_click():
-    GUI_Builder.top.Label1.configure(text="Add cancle")
+    GUI_Builder.object.Label1.configure(text="Add cancle")
     feature_support.add=0
     global data1
     data1=[]

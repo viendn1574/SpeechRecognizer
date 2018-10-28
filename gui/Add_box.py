@@ -383,7 +383,7 @@ class vKeyboard(ttk.Frame):
                     pfile.write("%s %s" % (str(person_count + 1).encode('utf-8'), u1.encode('utf-8')))
                     pfile.close()
                 lpfile.close()
-            GUI_Builder.top.Button1.config(state=NORMAL)
+            GUI_Builder.object.Button1.config(state=NORMAL)
             self.parentPage.destroy()
             self.root.destroy()
             feature_support.add += 1

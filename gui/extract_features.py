@@ -1,26 +1,43 @@
+import librosa
 import numpy
+import resampy
 
 from scipy.io.wavfile import read
 from scipy.io.wavfile import write
 from python_speech_features import fbank, dct, lifter
 from python_speech_features import delta
 from pybrain.tools.xml import NetworkReader
-
+import numpy as np
+import scipy
+#import util
 import GUI_Builder
 
 net_noise=NetworkReader.readFrom('./model/net_noise.xml')
+def resample(y, orig_sr, target_sr):
+
+    if orig_sr == target_sr:
+        return y
+    ratio = float(target_sr) / orig_sr
+    n_samples = int(np.ceil(y.shape[-1] * ratio))
+    y_hat = scipy.signal.resample(y, n_samples, axis=-1)
+
+    #if fix:
+    #    y_hat = util.fix_length(y_hat, n_samples, **kwargs)
+    return np.ascontiguousarray(y_hat, dtype=y.dtype)
+
 def reduce_noise(filename):
     namefile = filename.replace(".wav", "")
     lowpass = 21 # Remove lower frequencies.
     highpass = 9000 # Remove higher frequencies.
     (Frequency, array) = read(filename)
-    lf = numpy.fft.rfft(array)
+    array_16=resample(array,44100,16000)
+    lf = numpy.fft.rfft(array_16)
     lf[:lowpass]= 0 # low pass filter
     lf[44:77]= 0# line noise
     lf[highpass:]= 0 # high pass filter
     nl = numpy.fft.irfft(lf)
     ns = numpy.column_stack(nl).ravel().astype(numpy.int16)
-    write(namefile+'_filtered.wav', Frequency,ns)
+    write(namefile+'_filtered.wav', 16000,ns)
 
 def extract_mfcc(signal,samplerate=16000,winlen=0.025,winstep=0.01,numcep=13,
          nfilt=26,nfft=512,lowfreq=0,highfreq=None,preemph=0.97,ceplifter=22,appendEnergy=True,
@@ -46,6 +63,8 @@ def extract_features(filename):
     reduce_noise(filename)
     namefile = filename.replace(".wav", "")
     rate,sig = read(namefile+'_filtered.wav')  # Y gives
+    #sig_16=resample(sig, 44100, 16000)
+
     mfcc_feat = extract_mfcc(sig,appendEnergy=False,numcep=12)
     GUI_Builder.object.canvas_show(sig,mfcc_feat)
     delta_mfcc = delta(mfcc_feat, 2)

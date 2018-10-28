@@ -1,16 +1,14 @@
 import numpy
 import pyaudio
 import wave
-import scipy.signal as signal
 
-import GUI_Builder
 
 class Recorder(object):
     '''A recorder class for recording audio to a WAV file.
     Records in mono by default.
     '''
 
-    def __init__(self, channels=1, rate=16000, frames_per_buffer=1024):
+    def __init__(self, channels=1, rate=44100, frames_per_buffer=1024):
         self.channels = channels
         self.rate = rate
         self.frames_per_buffer = frames_per_buffer
