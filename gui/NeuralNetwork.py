@@ -1,12 +1,6 @@
-import csv
+import requests
 import numpy
-import pandas
-
-from pybrain.tools.shortcuts import buildNetwork
-from pybrain.datasets import ClassificationDataSet
-from pybrain.supervised.trainers import BackpropTrainer
-from pybrain.structure.modules   import SoftmaxLayer
-from pybrain.tools.xml import NetworkWriter
+import json
 from pybrain.tools.xml import NetworkReader
 
 model = []
@@ -21,27 +15,11 @@ def init_model():
         model.insert(model.__len__(),net)
 
 
-def add_model(dataset):
-    ds = ClassificationDataSet(108,1,nb_classes=2)
-    dataframe = pandas.read_csv("./data/train.csv", delimiter=" ",header=None)
-    data_train = dataframe.values
-    #dataframe = pandas.read_csv("database.csv", delimiter=" ", header=None)
-    data_train=numpy.concatenate((data_train,dataset))
-    input=data_train[:,1:109].astype(float)
-    target=data_train[:,0]
-    target = numpy.reshape(target, (-1, 1))
-    ds.setField('input', input)
-    ds.setField('target', target)
-    ds._convertToOneOfMany()
-    net = buildNetwork(ds.indim, 50, ds.outdim, outclass=SoftmaxLayer)
-    def train():
-        global model
-        back=BackpropTrainer(net,ds,learningrate = 0.0001, momentum = 0.1,verbose=True, weightdecay=0.1)
-        #back.trainUntilConvergence(verbose=True)
-        back.trainEpochs(100)
-        NetworkWriter.writeToFile(net, './model/net%d.xml'%(model.__len__()+1))
-        model.append(net)
-    train()
+def add_model(dataset,number_person):
+    json_data = json.dumps(dataset)
+    response = requests.post('http://localhost:8000', data=json_data)
+    with open('./model/net%d.xml'%int(number_person), 'wb') as file:
+        file.write(response.content)
 
 def compute(a):
     global model

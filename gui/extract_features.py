@@ -1,6 +1,4 @@
-import librosa
 import numpy
-import resampy
 
 from scipy.io.wavfile import read
 from scipy.io.wavfile import write
@@ -8,8 +6,7 @@ from python_speech_features import fbank, dct, lifter
 from python_speech_features import delta
 from pybrain.tools.xml import NetworkReader
 import numpy as np
-import scipy
-#import util
+from scipy import signal
 import GUI_Builder
 
 net_noise=NetworkReader.readFrom('./model/net_noise.xml')
@@ -19,8 +16,7 @@ def resample(y, orig_sr, target_sr):
         return y
     ratio = float(target_sr) / orig_sr
     n_samples = int(np.ceil(y.shape[-1] * ratio))
-    y_hat = scipy.signal.resample(y, n_samples, axis=-1)
-
+    y_hat = signal.resample(y, n_samples, axis=-1)
     #if fix:
     #    y_hat = util.fix_length(y_hat, n_samples, **kwargs)
     return np.ascontiguousarray(y_hat, dtype=y.dtype)

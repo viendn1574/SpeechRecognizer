@@ -129,7 +129,6 @@ def Record_release(event,Label1):
             Label1.configure(text="Thêm không thành công lần %d, bạn nói nhanh quá." %feature_support.add)
     if feature_support.add==9:
         number_person=0
-
         with open('./data/list_person.txt','a') as lpfile:
             with open('person_temp.txt','r') as ptemp:
                 person=ptemp.readline()
@@ -140,8 +139,8 @@ def Record_release(event,Label1):
                 ptemp.close()
             lpfile.close()
         for i in range(0,len(data1)):
-            data1[i]=numpy.append([1],data1[i])
-        NeuralNetwork.add_model(data1)
+            data1[i]=(numpy.append([1],data1[i])).tolist()
+        NeuralNetwork.add_model(data1,number_person)
         data1 = []
         feature_support.add = 0
         Label1.configure(text="")
