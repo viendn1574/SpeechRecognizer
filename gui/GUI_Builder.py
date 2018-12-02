@@ -4,6 +4,7 @@ import pygame
 import GUI_Builder
 import Tkinter
 import matplotlib
+import RPi.GPIO as GPIO
 matplotlib.use('TkAgg')
 
 from matplotlib.figure import Figure
@@ -12,6 +13,11 @@ import feature_support
 import NeuralNetwork
 
 GUI_Builder.object=None
+GPIO.setwarnings(False)
+GPIO.setmode(GPIO.BCM)
+
+GPIO.setup(18,GPIO.IN,pull_up_down=GPIO.PUD_UP)
+
 def vp_start_gui():
     '''Starting point when module is the main routine.'''
     with open('./data/list_person.txt','r') as lpfile:
@@ -118,6 +124,7 @@ class New_Toplevel:
         self.canvas.get_tk_widget().pack(side=Tkinter.TOP, fill=Tkinter.BOTH, expand=1)
         self.root=top
         self.afterid= self.root.after(5000,self.update_clock)
+        GPIO.add_event_detect(18, GPIO.FALLING, callback=lambda event, Label1=self.Label1:  feature_support.Record_click(event,Label1), bouncetime=200)
 
 
     def canvas_show(self,sig,mfcc):
