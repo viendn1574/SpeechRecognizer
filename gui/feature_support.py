@@ -51,7 +51,7 @@ global recfile2
 
 def Record_click(event,label1):
     GPIO.remove_event_detect(18)
-    GPIO.add_event_detect(18, GPIO.RISING, callback=lambda event, Label1=self.Label1: feature_support.Record_release(event,Label1), bouncetime=500)
+    GPIO.add_event_detect(18, GPIO.RISING, callback=lambda event, Label1=label1: feature_support.Record_release(event,Label1), bouncetime=500)
     active = pygame.mixer.get_init()
     if active != None:
         pygame.mixer.music.stop()
@@ -80,10 +80,10 @@ def Record_click(event,label1):
 
 data1 =[]
 
-def Record_release(event,Label1):
+def Record_release(event,label1):
     print('feature_support.Record_release')
     GPIO.remove_event_detect(18)
-    GPIO.add_event_detect(18, GPIO.FALLING, callback=lambda event, Label1=self.Label1:  feature_support.Record_click(event,Label1), bouncetime=200)
+    GPIO.add_event_detect(18, GPIO.FALLING, callback=lambda event, Label1=label1:  feature_support.Record_click(event,Label1), bouncetime=200)
     global recfile2
     recfile2.stop_recording()
     recfile2.close()
@@ -110,13 +110,13 @@ def Record_release(event,Label1):
 
 
         if result == 0:
-            Label1.configure(text="Xin thử lại")
+            label1.configure(text="Xin thử lại")
 
             mixer.music.load("./data/xinthulai.mp3")
             mixer.music.play()
 
         if result == -1:
-            Label1.configure(text="Bạn nói nhanh quá")
+            label1.configure(text="Bạn nói nhanh quá")
 
             mixer.music.load("./data/bannoinhanhqua.mp3")
             mixer.music.play()
@@ -127,10 +127,10 @@ def Record_release(event,Label1):
         features=extract_features.extract_features('nonblocking.wav')
         if len(features)>0:
             data1.extend(features)
-            Label1.configure(text="Thêm thành công lần %d" %feature_support.add)
+            label1.configure(text="Thêm thành công lần %d" %feature_support.add)
             feature_support.add +=1
         else:
-            Label1.configure(text="Thêm không thành công lần %d, bạn nói nhanh quá." %feature_support.add)
+            label1.configure(text="Thêm không thành công lần %d, bạn nói nhanh quá." %feature_support.add)
     if feature_support.add==9:
         number_person=0
         with open('./data/list_person.txt','a') as lpfile:
@@ -147,7 +147,7 @@ def Record_release(event,Label1):
         NeuralNetwork.add_model(data1,number_person)
         data1 = []
         feature_support.add = 0
-        Label1.configure(text="")
+        label1.configure(text="")
         os.remove('person_temp.txt')
         GUI_Builder.object.Button1.config(state=DISABLED)
 
