@@ -15,6 +15,7 @@ import Management
 import GUI_Builder
 import Host_box
 from gtts import gTTS
+import RPi.GPIO as GPIO
 
 feature_support.login = False
 feature_support.add=0
