@@ -324,6 +324,7 @@ class vKeyboard(ttk.Frame):
             if u1 == '1' and u2 == '1':
                 GUI_Builder.object.Button3.configure(text="Log out")
                 GUI_Builder.object.Button4.config(state=NORMAL)
+                GUI_Builder.object.ButtonConfig.config(state=NORMAL)
                 tkMessageBox.showinfo("Valid", "Log in Sucessfully")
                 feature_support.login=True
                 self.parentPage.destroy()

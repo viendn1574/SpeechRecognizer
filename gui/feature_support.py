@@ -1,14 +1,10 @@
 # -*- coding: utf-8 -*-
-import csv
 import mmap
-from time import sleep
-
 import numpy
 import os
 
 import pygame
 from pygame import mixer
-
 import NeuralNetwork
 from Tkinter import *
 import Login_box
@@ -17,6 +13,7 @@ import extract_features
 import feature_support
 import Management
 import GUI_Builder
+import Host_box
 from gtts import gTTS
 
 feature_support.login = False
@@ -168,6 +165,7 @@ def Login_click(buttonLogin,buttonList):
         feature_support.login = False
         buttonLogin.configure(text="Log in")
         buttonList.config(state=DISABLED)
+        GUI_Builder.object.ButtonConfig.config(state=DISABLED)
         if feature_support.add>0:
             feature_support.CancleAdd_click()
 
@@ -177,3 +175,7 @@ def getNamePerson(index):
         person=list_person[index-1]
         name=person.split()
         return " ".join(name[item] for item in range(1,name.__len__()))
+
+def Setting_click():
+    print('feature_support.Setting_click')
+    Host_box.GUI()
