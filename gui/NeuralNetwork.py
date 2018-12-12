@@ -17,7 +17,7 @@ def init_model():
 
 def add_model(dataset,number_person):
     json_data = json.dumps(dataset)
-    response = requests.post('http://192.168.1.104:8000', data=json_data)
+    response = requests.post('http://192.168.1.108:8000', data=json_data)
     with open('./model/net%d.xml'%int(number_person), 'wb') as file:
         file.write(response.content)
 

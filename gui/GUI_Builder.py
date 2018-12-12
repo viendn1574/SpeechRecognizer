@@ -42,7 +42,7 @@ class New_Toplevel:
         _ana1color = '#d9d9d9' # X11 color: 'gray85'
         _ana2color = '#d9d9d9' # X11 color: 'gray85'
 
-        top.geometry("603x421+533+155")
+        top.geometry("800x460-1+0")
         top.title("New Toplevel")
         top.configure(background="#d9d9d9")
         top.configure(highlightbackground="#d9d9d9")
@@ -59,7 +59,7 @@ class New_Toplevel:
         self.Frame1.configure(width=455)
 
         self.Button1 = Tkinter.Button(top)
-        self.Button1.place(relx=0.41, rely=0.9, height=24, width=70)
+        self.Button1.place(relx=0.41, rely=0.88, height=28, width=75)
         self.Button1.configure(activebackground="#d9d9d9")
         self.Button1.configure(activeforeground="#000000")
         self.Button1.configure(background="#d9d9d9")
@@ -74,7 +74,7 @@ class New_Toplevel:
 
 
         self.Button4 = Tkinter.Button(top)
-        self.Button4.place(relx=0.9, rely=0.02, height=24, width=49)
+        self.Button4.place(relx=0.9, rely=0.02, height=28, width=53)
         self.Button4.configure(activebackground="#d9d9d9")
         self.Button4.configure(activeforeground="#000000")
         self.Button4.configure(background="#d9d9d9")
@@ -88,7 +88,7 @@ class New_Toplevel:
         self.Button4.config(state=Tkinter.DISABLED)
 
         self.Button3 = Tkinter.Button(top)
-        self.Button3.place(relx=0.8, rely=0.02, height=24, width=55)
+        self.Button3.place(relx=0.8, rely=0.02, height=28, width=58)
         self.Button3.configure(activebackground="#d9d9d9")
         self.Button3.configure(activeforeground="#000000")
         self.Button3.configure(background="#d9d9d9")
@@ -104,7 +104,7 @@ class New_Toplevel:
         self.Label1.place(relx=0.021,rely=0.85)
 
         self.Button2 = Tkinter.Button(top)
-        self.Button2.place(relx=0.28, rely=0.9, height=24, width=48)
+        self.Button2.place(relx=0.28, rely=0.88, height=28, width=54)
         self.Button2.configure(activebackground="#d9d9d9")
         self.Button2.configure(activeforeground="#000000")
         self.Button2.configure(background="#d9d9d9")
