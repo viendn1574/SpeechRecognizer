@@ -24,14 +24,14 @@ def List_click():
     list_box_gui= Toplevel()
     list_box_gui.grab_set()
     list_box_gui.resizable(False,False)
-    list_box_gui.geometry("300x250+700+200")
+    list_box_gui.geometry("400x230+250+80")
     bAdd= Button(list_box_gui, text="Add",width=10,command=lambda: Management.Add_click(list_box_gui))
     bAdd.place(relx=0.05, rely=0.05)
     bEdit=Button(list_box_gui, text="Edit",width=10,command=lambda: Management.Edit_click(list_box_gui,Lb))
-    bEdit.place(relx=0.375, rely=0.05)
+    bEdit.place(relx=0.37, rely=0.05)
     bDel=Button(list_box_gui,text="Delete",width=10,command=lambda: Management.Delete_click(list_box_gui,Lb))
-    bDel.place(relx=0.7, rely=0.05)
-    Lb=Listbox(list_box_gui,width=45)
+    bDel.place(relx=0.67, rely=0.05)
+    Lb=Listbox(list_box_gui,width=44)
     Lb.place(relx=0.05, rely=0.2)
     with open('./data/list_person.txt','rb') as lpfile:
         for person in lpfile:
@@ -48,7 +48,7 @@ global recfile2
 
 def Record_click(event,label1):
     GPIO.remove_event_detect(18)
-    GPIO.add_event_detect(18, GPIO.RISING, callback=lambda event, Label1=self.Label1: feature_support.Record_release(event,Label1), bouncetime=500)
+    GPIO.add_event_detect(18, GPIO.RISING, callback=lambda event, Label1=label1: feature_support.Record_release(event,Label1), bouncetime=1200)
     active = pygame.mixer.get_init()
     if active != None:
         pygame.mixer.music.stop()
@@ -80,7 +80,7 @@ data1 =[]
 def Record_release(event,Label1):
     print('feature_support.Record_release')
     GPIO.remove_event_detect(18)
-    GPIO.add_event_detect(18, GPIO.FALLING, callback=lambda event, Label1=self.Label1:  feature_support.Record_click(event,Label1), bouncetime=200)
+    GPIO.add_event_detect(18, GPIO.FALLING, callback=lambda event, Label1=Label1:  feature_support.Record_click(event,Label1), bouncetime=1200)
     global recfile2
     recfile2.stop_recording()
     recfile2.close()

@@ -7,19 +7,21 @@ import feature_support
 
 
 # -- Declaration of font styles --- #
-font_title = ("Helvetica", 18, "bold")
-font_message = ("Helvetica", 14)
-font_message_small = ("Helvetica", 11)
-font_vKeyboard = ("Helvetica", 10)
-font_vKeyboardSpecialKeys = ("Helvetica", 10, "bold")
+font_title = ("Helvetica", 30, "bold")
+font_message = ("Helvetica", 19)
+font_Entry = ("Helvetica", 19)
+font_vKeyboard = ("Helvetica", 16)
+font_vKeyboardSpecialKeys = ("Helvetica", 16, "bold")
 
 # -- GUI's main class -- #
 Login_box.object=None
 class GUI(Toplevel):
     def __init__(self, *args, **kwargs):
         Toplevel.__init__(self, *args, **kwargs)
+        
+        self.geometry("%dx%d+%d+%d" % (800, 460, -1, 0))
 
-        container = ttk.Frame(self, width=480, height=320)
+        container = ttk.Frame(self, width=800, height=460)
         container.grid_propagate(0)
         container.pack(fill="both", expand=1)
 
@@ -34,7 +36,7 @@ class GUI(Toplevel):
         self.frames[page_name] = frame
 
         frame.grid(row=0, column=0, sticky="nsew")
-        self.geometry("%dx%d+%d+%d"%(480,320,0,0))
+        
         self.showFrame("LoginPage")
         Login_box.object=self
         self.grab_set()
@@ -51,18 +53,18 @@ class LoginPage(ttk.Frame):
 
         self.label1 = ttk.Label(self, text="User name:", font=font_message)
         self.label1.pack(side="top")
-        self.entry1 = ttk.Entry(self)
+        self.entry1 = ttk.Entry(self, font=font_Entry, justify=CENTER)
         self.entry1.pack(side="top")
 
         self.label0 = ttk.Label(self, text="  ", font=font_message)
         self.label0.pack(side="top")
         self.label2 = ttk.Label(self, text="Password:", font=font_message)
         self.label2.pack(side="top")
-        self.entry2 = ttk.Entry(self, show="*")
+        self.entry2 = ttk.Entry(self, show="*", font=font_Entry, justify=CENTER)
         self.entry2.pack(side="top")
 
-        self.frame1 = ttk.Frame(self, width=480, height=320)
-        self.frame1.pack(side="top", pady=30,padx=15)
+        self.frame1 = ttk.Frame(self, width=800, height=460)
+        self.frame1.pack(side="top", pady=50,padx=60)
 
         self.keysize = 4
 
@@ -81,8 +83,8 @@ class LoginPage(ttk.Frame):
             self.frame1.destroy()
             self.kb.destroy()
 
-            self.frame1 = ttk.Frame(self, width=480, height=320)
-            self.frame1.pack(side="top", pady=30,padx=15)
+            self.frame1 = ttk.Frame(self, width=800, height=460)
+            self.frame1.pack(side="top", pady=50,padx=60)
             self.kb = vKeyboard( parentPage = self,
                                  attach=self.entry1,
                                  x=self.entry1.winfo_rootx(),
@@ -94,8 +96,8 @@ class LoginPage(ttk.Frame):
             self.frame1.destroy()
             self.kb.destroy()
 
-            self.frame1 = ttk.Frame(self, width=480, height=320)
-            self.frame1.pack(side="top", pady=30,padx=15)
+            self.frame1 = ttk.Frame(self, width=800, height=460)
+            self.frame1.pack(side="top", pady=50,padx=60)
             self.kb = vKeyboard( parentPage = self,
                                  attach=self.entry2,
                                  x=self.entry2.winfo_rootx(),
@@ -324,8 +326,7 @@ class vKeyboard(ttk.Frame):
             if u1 == '1' and u2 == '1':
                 GUI_Builder.object.Button3.configure(text="Log out")
                 GUI_Builder.object.Button4.config(state=NORMAL)
-                GUI_Builder.object.ButtonConfig.config(state=NORMAL)
-                tkMessageBox.showinfo("Valid", "Log in Sucessfully")
+                #tkMessageBox.showinfo("Valid", "Log in Sucessfully")
                 feature_support.login=True
                 self.parentPage.destroy()
                 Login_box.object.grab_release()

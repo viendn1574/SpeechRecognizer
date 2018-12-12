@@ -1,29 +1,27 @@
 # -*- coding: utf-8 -*-
-import os
-import pygame
 import ttk
 from Tkinter import *
 import codecs
-
-from gtts import gTTS
 
 import Edit_box
 import utils
 
 # -- Declaration of font styles --- #
-font_title = ("Helvetica", 18, "bold")
-font_message = ("Helvetica", 14)
-font_message_small = ("Helvetica", 11)
-font_vKeyboard = ("Helvetica", 10)
-font_vKeyboardSpecialKeys = ("Helvetica", 10, "bold")
+font_title = ("Helvetica", 30, "bold")
+font_message = ("Helvetica", 19)
+font_Entry = ("Helvetica", 19)
+font_vKeyboard = ("Helvetica", 16)
+font_vKeyboardSpecialKeys = ("Helvetica", 16, "bold")
 
 # -- GUI's main class -- #
 Edit_box.object=None
 class GUI(Toplevel):
     def __init__(self, root, Listbox):
         Toplevel.__init__(self)
+        
+        self.geometry("%dx%d+%d+%d" % (800, 460, -1, 0))
 
-        container = ttk.Frame(self, width=480, height=320)
+        container = ttk.Frame(self, width=800, height=460)
         container.grid_propagate(0)
         container.pack(fill="both", expand=1)
 
@@ -58,7 +56,7 @@ class EditPage(ttk.Frame):
 
         self.label1 = ttk.Label(self, text="Enter the name:", font=font_message)
         self.label1.pack(side="top")
-        self.entry1 = ttk.Entry(self)
+        self.entry1 = ttk.Entry(self, font=font_Entry, justify=CENTER)
         self.entry1.pack(side="top")
 
         self.label0 = ttk.Label(self, text="  ", font=font_message)
@@ -66,8 +64,8 @@ class EditPage(ttk.Frame):
         self.label2 = ttk.Label(self, text="  ", font=font_message)
         self.label2.pack(side="top")
 
-        self.frame1 = ttk.Frame(self, width=480, height=320)
-        self.frame1.pack(side="top", pady=30,padx=15)
+        self.frame1 = ttk.Frame(self, width=800, height=460)
+        self.frame1.pack(side="top", pady=50,padx=60)
 
         self.keysize = 4
 
@@ -86,8 +84,8 @@ class EditPage(ttk.Frame):
         self.frame1.destroy()
         self.kb.destroy()
 
-        self.frame1 = ttk.Frame(self, width=480, height=320)
-        self.frame1.pack(side="top", pady=30,padx=15)
+        self.frame1 = ttk.Frame(self, width=800, height=460)
+        self.frame1.pack(side="top", pady=50,padx=60)
         self.kb = vKeyboard(parentPage=self,
                             attach=self.entry1,
                             x=self.entry1.winfo_rootx(),
@@ -384,20 +382,9 @@ class vKeyboard(ttk.Frame):
         elif k == 'ENTER':
             print('feature_support.Enter_click')
             u1 = self.attach.get()
-            print [u1]
             newrow = []
             selected = self.Listbox.get(ACTIVE)
 
-            active = pygame.mixer.get_init()
-            if active != None:
-                pygame.mixer.music.stop()
-                pygame.mixer.quit()
-                pygame.quit()
-
-            os.remove("./data/%s.mp3"%selected.split(' ----- ')[1])
-            tts = gTTS(text=("Xin chào %s"%u1.encode('utf-8')).decode('utf-8'), lang='vi')
-
-            tts.save("./data/%s.mp3"%u1)
             with codecs.open('./data/list_person.txt', 'r',"utf-8-sig") as lpfile:
                 for person in lpfile:
                     row = person.split()
