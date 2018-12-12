@@ -74,7 +74,7 @@ class New_Toplevel:
 
 
         self.Button4 = Tkinter.Button(top)
-        self.Button4.place(relx=0.9, rely=0.02, height=28, width=53)
+        self.Button4.place(relx=0.9, rely=0.02, height=28, width=58)
         self.Button4.configure(activebackground="#d9d9d9")
         self.Button4.configure(activeforeground="#000000")
         self.Button4.configure(background="#d9d9d9")
@@ -88,7 +88,7 @@ class New_Toplevel:
         self.Button4.config(state=Tkinter.DISABLED)
 
         self.ButtonConfig = Tkinter.Button(top)
-        self.ButtonConfig.place(relx=0.9, rely=0.1, height=24, width=49)
+        self.ButtonConfig.place(relx=0.9, rely=0.1, height=24, width=58)
         self.ButtonConfig.configure(activebackground="#d9d9d9")
         self.ButtonConfig.configure(activeforeground="#000000")
         self.ButtonConfig.configure(background="#d9d9d9")
