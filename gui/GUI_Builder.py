@@ -124,7 +124,7 @@ class New_Toplevel:
         self.canvas.get_tk_widget().pack(side=Tkinter.TOP, fill=Tkinter.BOTH, expand=1)
         self.root=top
         self.afterid= self.root.after(5000,self.update_clock)
-        GPIO.add_event_detect(18, GPIO.FALLING, callback=lambda event, Label1=self.Label1:  feature_support.Record_click(event,Label1), bouncetime=200)
+        GPIO.add_event_detect(18, GPIO.FALLING, callback=lambda event, Label1=self.Label1:  feature_support.Record_click(event,Label1), bouncetime=1200)
 
 
     def canvas_show(self,sig,mfcc):
