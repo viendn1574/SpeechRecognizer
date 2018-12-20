@@ -25,7 +25,7 @@ def List_click():
     list_box_gui= Toplevel()
     list_box_gui.grab_set()
     list_box_gui.resizable(False,False)
-    list_box_gui.geometry("400x230+250+80")
+    list_box_gui.geometry("400x230+200+80")
     bAdd= Button(list_box_gui, text="Add",width=10,command=lambda: Management.Add_click(list_box_gui))
     bAdd.place(relx=0.05, rely=0.05)
     bEdit=Button(list_box_gui, text="Edit",width=10,command=lambda: Management.Edit_click(list_box_gui,Lb))

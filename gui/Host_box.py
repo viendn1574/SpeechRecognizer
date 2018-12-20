@@ -7,19 +7,21 @@ import feature_support
 
 
 # -- Declaration of font styles --- #
-font_title = ("Helvetica", 18, "bold")
-font_message = ("Helvetica", 14)
-font_message_small = ("Helvetica", 11)
-font_vKeyboard = ("Helvetica", 10)
-font_vKeyboardSpecialKeys = ("Helvetica", 10, "bold")
+font_title = ("Helvetica", 30, "bold")
+font_message = ("Helvetica", 20)
+font_Entry = ("Helvetica", 20)
+font_vKeyboard = ("Helvetica", 17)
+font_vKeyboardSpecialKeys = ("Helvetica", 17, "bold")
 
 # -- GUI's main class -- #
 Host_box.object=None
 class GUI(Toplevel):
     def __init__(self, *args, **kwargs):
         Toplevel.__init__(self, *args, **kwargs)
+        
+        self.geometry("%dx%d+%d+%d" % (800, 460, -1, 0))
 
-        container = ttk.Frame(self, width=480, height=320)
+        container = ttk.Frame(self, width=800, height=460)
         container.grid_propagate(0)
         container.pack(fill="both", expand=1)
 
@@ -34,7 +36,6 @@ class GUI(Toplevel):
         self.frames[page_name] = frame
 
         frame.grid(row=0, column=0, sticky="nsew")
-        self.geometry("%dx%d+%d+%d"%(480,320,0,0))
         self.showFrame("HostPage")
         Host_box.object=self
         self.grab_set()
@@ -47,17 +48,17 @@ class HostPage(ttk.Frame):
     def __init__(self, parent):
         ttk.Frame.__init__(self, parent)
         label1 = ttk.Label(self, text="Setting Page", font=font_title)
-        label1.pack(side="top", fill="x", pady=7, padx=10)
+        label1.pack(side="top", fill="x", pady=20, padx=10)
 
         self.label1 = ttk.Label(self, text="IP:", font=font_message)
         self.label1.pack(side="top")
-        self.entry1 = ttk.Entry(self)
+        self.entry1 = ttk.Entry(self, font=font_Entry, justify=CENTER)
         self.entry1.pack(side="top")
         with open('./data/host.conf','r') as ptemp:
             person=ptemp.readline()
             self.entry1.insert(0, person)
-        self.frame1 = ttk.Frame(self, width=480, height=320)
-        self.frame1.pack(side="top", pady=30,padx=15)
+        self.frame1 = ttk.Frame(self, width=800, height=460)
+        self.frame1.pack(side="top", pady=100,padx=60)
 
         self.keysize = 4
 
@@ -75,8 +76,8 @@ class HostPage(ttk.Frame):
             self.frame1.destroy()
             self.kb.destroy()
 
-            self.frame1 = ttk.Frame(self, width=480, height=320)
-            self.frame1.pack(side="top", pady=30,padx=15)
+            self.frame1 = ttk.Frame(self, width=800, height=460)
+            self.frame1.pack(side="top", pady=100,padx=60)
             self.kb = vKeyboard( parentPage = self,
                                  attach=self.entry1,
                                  x=self.entry1.winfo_rootx(),
