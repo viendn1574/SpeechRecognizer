@@ -1,7 +1,11 @@
 # -*- coding: utf-8 -*-
+import os
+import pygame
 import ttk
 from Tkinter import *
 import codecs
+
+from gtts import gTTS
 
 import Edit_box
 import utils
@@ -384,7 +388,16 @@ class vKeyboard(ttk.Frame):
             u1 = self.attach.get()
             newrow = []
             selected = self.Listbox.get(ACTIVE)
+            active = pygame.mixer.get_init()
+            if active != None:
+                pygame.mixer.music.stop()
+                pygame.mixer.quit()
+                pygame.quit()
 
+            os.remove("./data/%s.mp3"%selected.split(' ----- ')[1])
+            tts = gTTS(text=("Xin chào %s"%u1.encode('utf-8')).decode('utf-8'), lang='vi')
+            tts.save("./data/%s.mp3"%u1)
+            
             with codecs.open('./data/list_person.txt', 'r',"utf-8-sig") as lpfile:
                 for person in lpfile:
                     row = person.split()

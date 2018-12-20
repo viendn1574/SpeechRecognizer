@@ -42,7 +42,7 @@ class RecordingFile(object):
                                      rate=self.rate,
                                      input=True,
                                      frames_per_buffer=self.frames_per_buffer,
-                                     input_device_index = 2)
+                                     input_device_index = 1)
         for _ in range(int(self.rate / self.frames_per_buffer * duration)):
             audio = self._stream.read(self.frames_per_buffer)
             self.wavefile.writeframes(audio)
@@ -56,7 +56,7 @@ class RecordingFile(object):
                                      rate=self.rate,
                                      input=True,
                                      frames_per_buffer=self.frames_per_buffer,
-                                     input_device_index = 2,
+                                     input_device_index = 1,
                                      stream_callback=self.get_callback())
 
         return self
