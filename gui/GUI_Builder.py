@@ -1,6 +1,5 @@
 import gc
 
-import pygame
 import GUI_Builder
 import Tkinter
 import matplotlib
@@ -159,14 +158,6 @@ class New_Toplevel:
         self.Label1.configure(text="")
         self.f.clf()
         self.canvas.draw()
-        active = pygame.mixer.get_init()
-
-        if active != None:
-            while pygame.mixer.music.get_busy():
-                pygame.time.Clock().tick(10)
-            pygame.mixer.music.stop()
-            pygame.mixer.quit()
-            pygame.quit()
         gc.collect()
 
         self.afterid= self.root.after(5000,self.update_clock)

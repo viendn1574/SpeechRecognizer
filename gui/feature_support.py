@@ -3,8 +3,6 @@ import mmap
 import numpy
 import os
 
-import pygame
-from pygame import mixer
 import NeuralNetwork
 from Tkinter import *
 import Login_box
@@ -50,11 +48,6 @@ global recfile2
 def Record_click(event,label1):
     GPIO.remove_event_detect(18)
     GPIO.add_event_detect(18, GPIO.RISING, callback=lambda event, Label1=label1: feature_support.Record_release(event,Label1), bouncetime=1200)
-    active = pygame.mixer.get_init()
-    if active != None:
-        pygame.mixer.music.stop()
-        pygame.mixer.quit()
-        pygame.quit()
     if os.path.exists('nonblocking.wav'):
         os.remove('nonblocking.wav')
     if os.path.exists('nonblocking_filtered.wav'):
@@ -86,7 +79,6 @@ def Record_release(event,Label1):
     recfile2.stop_recording()
     recfile2.close()
     global data1
-    pygame.init()
     if feature_support.add==0:
         features=extract_features.extract_features('nonblocking.wav')
         result=NeuralNetwork.compute(features)
@@ -95,29 +87,16 @@ def Record_release(event,Label1):
         if result >= 1:
             name= getNamePerson(int(result))
             Label1.configure(text="Xin chào %s"%name)
-            active = pygame.mixer.get_init()
-            if active == None:
-                pygame.init()
-            with open("./data/%s.mp3"%name.decode('utf-8')) as f:
-                m = mmap.mmap(f.fileno(), 0, access=mmap.ACCESS_READ)
-                pygame.mixer.music.load(m)
-                pygame.mixer.music.play()
-                while pygame.mixer.music.get_busy():
-                    pygame.time.Clock().tick(10)
-                m.close()
+            os.system("mpg123 ./data/%s.mp3"%name)
 
 
         if result == 0:
             Label1.configure(text="Xin thử lại")
-
-            mixer.music.load("./data/xinthulai.mp3")
-            mixer.music.play()
+            os.system("mpg123 ./data/xinthulai.mp3")
 
         if result == -1:
             Label1.configure(text="Bạn nói nhanh quá")
-
-            mixer.music.load("./data/bannoinhanhqua.mp3")
-            mixer.music.play()
+            os.system("mpg123 ./data/bannoinhanhqua.mp3")
 
 
 
