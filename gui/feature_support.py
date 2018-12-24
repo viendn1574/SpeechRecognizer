@@ -88,6 +88,7 @@ def Record_release(event,Label1):
             name= getNamePerson(int(result))
             Label1.configure(text="Xin chào %s"%name)
             os.system("mpg123 ./data/%s.mp3"%name)
+            GPIO.output(23, 0)
 
 
         if result == 0:
