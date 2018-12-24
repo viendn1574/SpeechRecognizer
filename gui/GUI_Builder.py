@@ -16,7 +16,8 @@ GPIO.setwarnings(False)
 GPIO.setmode(GPIO.BCM)
 
 GPIO.setup(18,GPIO.IN,pull_up_down=GPIO.PUD_UP)
-GPIO.setup(23,GPIO.OUT,pull_up_down=GPIO.PUD_UP)
+GPIO.setup(23,GPIO.OUT)
+GPIO.output(23, 1)
 def vp_start_gui():
     '''Starting point when module is the main routine.'''
     with open('./data/list_person.txt','r') as lpfile:
