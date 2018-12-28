@@ -25,6 +25,7 @@ def add_model(dataset,number_person):
 
 def compute(a):
     global model
+    print "computeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee"
     number_person=model.__len__()
     if number_person==0:
         return 0
@@ -35,13 +36,13 @@ def compute(a):
         result_person=list(numpy.zeros(2))
         for i in range(0,len(a)):
             activate=list(model[person_count].activate(a[i]))
-            if activate[1] >= 0.5:
+            if activate[1] >= 0.7:
                 result_person[1] += 1
             else: result_person[0] += 1
-            #print activate
+            print activate
         #print result_person
-        #print result_person[1]/len(a)
-        if result_person[1]/len(a) >= 0.9:
+        print result_person[1]/len(a)
+        if result_person[1]/len(a) >= 0.7:
             result_allperson[person_count]=result_person[1]/len(a)
     #print result_allperson
     if max(result_allperson) >= 0.7:
