@@ -22,6 +22,8 @@ def add_model(dataset,number_person):
     response = requests.post('http://%s:8000' % person, data=json_data)
     with open('./model/net%d.xml'%int(number_person), 'wb') as file:
         file.write(response.content)
+    net = NetworkReader.readFrom('./model/net%d.xml'%int(number_person))
+    model.insert(model.__len__(),net)
 
 def compute(a):
     global model

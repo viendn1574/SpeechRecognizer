@@ -8,6 +8,7 @@ from pybrain.tools.xml import NetworkReader
 import numpy as np
 from scipy import signal
 import GUI_Builder
+from FundamentaFreq import freq_from_autocorr
 
 net_noise=NetworkReader.readFrom('./model/net_noise.xml')
 def resample(y, orig_sr, target_sr):
@@ -45,7 +46,7 @@ def extract_mfcc(signal,samplerate=16000,winlen=0.025,winstep=0.01,numcep=13,
     feat = lifter(feat,ceplifter)
     if appendEnergy:
         feat=numpy.c_[feat, numpy.log(energy)] # append cepstral coefficient with log of frame energy
-    return feat
+    return feat, numpy.log(energy)
 
 def isNoise(a):
     global net
@@ -61,7 +62,7 @@ def extract_features(filename):
     rate,sig = read(namefile+'_filtered.wav')  # Y gives
     #sig_16=resample(sig, 44100, 16000)
 
-    mfcc_feat = extract_mfcc(sig,appendEnergy=False,numcep=12)
+    mfcc_feat, energy = extract_mfcc(sig,appendEnergy=False,numcep=12)
     GUI_Builder.object.canvas_show(sig,mfcc_feat)
     delta_mfcc = delta(mfcc_feat, 2)
     delta_mfcc_2 = delta(delta_mfcc, 2)
@@ -72,11 +73,13 @@ def extract_features(filename):
     for j in range(0,len(mfcc_feat)):
         if (isNoise(dataraw[count])==1):
             dataraw=numpy.delete(dataraw,count,0)
+            energy=numpy.delete(energy,count,0)
         else:
             count+=1
-
+    dataraw=numpy.c_[dataraw,energy]
+    f0=freq_from_autocorr(sig,rate)
     data=[]
     for j in range(0,len(dataraw)-3,2):
         datatemp=dataraw[j:j+3,:]
-        data.append(datatemp.ravel(0))
+        data.append(numpy.append(datatemp.ravel(0),f0))
     return data
