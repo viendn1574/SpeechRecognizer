@@ -2,7 +2,7 @@
 import mmap
 import numpy
 import os
-
+import time
 import NeuralNetwork
 from Tkinter import *
 import Login_box
@@ -89,7 +89,7 @@ def Record_release(event,Label1):
             Label1.configure(text="Xin chào %s"%name)
             os.system("mpg123 ./data/%s.mp3"%name)
             GPIO.output(23, 0)
-
+            time.sleep(0.5)
 
         if result == 0:
             Label1.configure(text="Xin thử lại")
@@ -132,6 +132,7 @@ def Record_release(event,Label1):
     #os.remove('nonblocking.wav')
     #os.remove('nonblocking_filtered.wav')
     sys.stdout.flush()
+    print("end")
 
 
 def CancleAdd_click():
