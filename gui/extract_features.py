@@ -73,10 +73,11 @@ def extract_features(filename):
     for j in range(0,len(mfcc_feat)):
         if (isNoise(dataraw[count])==1):
             dataraw=numpy.delete(dataraw,count,0)
-            energy=numpy.delete(energy,count,0)
+            #energy=numpy.delete(energy,count,0)
         else:
             count+=1
-    dataraw=numpy.c_[dataraw,energy]
+
+    #dataraw=numpy.c_[dataraw,energy]
     f0=freq_from_autocorr(sig,rate)
     data=[]
     for j in range(0,len(dataraw)-3,2):
