@@ -41,7 +41,7 @@ def List_click():
     sys.stdout.flush()
 
 
-rec= Module_recoder.Recorder(channels=1,frames_per_buffer=1024)
+rec= Module_recoder.Recorder(channels=1,frames_per_buffer=512)
 global recfile2
 
 

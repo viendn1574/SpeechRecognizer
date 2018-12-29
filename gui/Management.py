@@ -25,7 +25,7 @@ def Delete_click(root,Listbox):
         print("Delete click")
         popup= Toplevel()
         popup.resizable(False,False)
-        popup.geometry("200x100+700+300")
+        popup.geometry("200x100+300+200")
         popup.grab_set()
 
         def Cancle():

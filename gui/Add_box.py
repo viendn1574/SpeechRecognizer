@@ -382,7 +382,7 @@ class vKeyboard(ttk.Frame):
             with open('./data/list_person.txt', 'r') as lpfile:
                 person_count = sum(1 for person in lpfile)
                 with open('person_temp.txt', 'w') as pfile:
-                    pfile.write("%s %s" % (person_count + 1, u1))
+                    pfile.write("%s %s" % (str(person_count + 1).encode('utf-8'), u1.encode('utf-8')))
                     pfile.close()
                 lpfile.close()
             GUI_Builder.object.Button1.config(state=NORMAL)
