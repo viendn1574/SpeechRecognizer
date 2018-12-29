@@ -77,9 +77,10 @@ def extract_features(filename):
         else:
             count+=1
     dataraw=numpy.c_[dataraw,energy]
-    f0=freq_from_autocorr(sig,rate)
+    #f0=freq_from_autocorr(sig,rate)
     data=[]
     for j in range(0,len(dataraw)-3,2):
         datatemp=dataraw[j:j+3,:]
-        data.append(numpy.append(datatemp.ravel(0),f0))
+        #data.append(numpy.append(datatemp.ravel(0),f0))
+        data.append(datatemp.ravel(0))
     return data
