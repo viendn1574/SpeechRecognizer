@@ -78,11 +78,11 @@ def Delete_click(root,Listbox):
 
         popup.wm_title("Delete")
         l1 = Label(popup, text="Bạn có muốn xóa !")
-        b1 = Button(popup, text="OK",width=7, command= lambda: OK(Listbox))
-        b2 = Button(popup, text="Cancle",width=7, command=Cancle)
+        b1 = Button(popup, text="OK",width=5, command= lambda: OK(Listbox))
+        b2 = Button(popup, text="Cancle",width=5, command=Cancle)
         l1.place(relx=0.25, rely=0.2)
-        b1.place(relx=0.18, rely=0.6)
-        b2.place(relx=0.52, rely=0.6)
+        b1.place(relx=0.1, rely=0.6)
+        b2.place(relx=0.55, rely=0.6)
         popup.mainloop()
     else:
         tkMessageBox.showinfo("Error", "Vui lòng chọn đối tượng")

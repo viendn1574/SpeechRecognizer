@@ -14,10 +14,9 @@ import NeuralNetwork
 GUI_Builder.object=None
 GPIO.setwarnings(False)
 GPIO.setmode(GPIO.BCM)
-
-GPIO.setup(18,GPIO.IN,pull_up_down=GPIO.PUD_UP)
 GPIO.setup(23,GPIO.OUT)
 GPIO.output(23, 1)
+
 def vp_start_gui():
     '''Starting point when module is the main routine.'''
     with open('./data/list_person.txt','r') as lpfile:
@@ -118,7 +117,7 @@ class New_Toplevel:
         self.Label1.place(relx=0.021,rely=0.85)
 
         self.Button2 = Tkinter.Button(top)
-        self.Button2.place(relx=0.28, rely=0.88, height=28, width=54)
+        self.Button2.place(relx=0.8, rely=0.6, height=140, width=140)
         self.Button2.configure(activebackground="#d9d9d9")
         self.Button2.configure(activeforeground="#000000")
         self.Button2.configure(background="#d9d9d9")
@@ -138,10 +137,9 @@ class New_Toplevel:
         self.canvas.get_tk_widget().pack(side=Tkinter.TOP, fill=Tkinter.BOTH, expand=1)
         self.root=top
         self.afterid= self.root.after(5000,self.update_clock)
-        GPIO.add_event_detect(18, GPIO.FALLING, callback=lambda event, Label1=self.Label1:  feature_support.Record_click(event,Label1), bouncetime=1200)
-
-
+        
     def canvas_show(self,sig,mfcc):
+        print ('canvas show')
         self.root.after_cancel(self.afterid)
 
         self.f.add_axes(self.a)
@@ -153,7 +151,7 @@ class New_Toplevel:
         self.canvas.draw()
         self.afterid=self.root.after(5000,self.update_clock)
         gc.collect()
-        return
+        print ('canvas show end')
     def update_clock(self):
 
         self.Label1.configure(text="")

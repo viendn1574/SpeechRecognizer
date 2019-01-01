@@ -46,8 +46,6 @@ global recfile2
 
 
 def Record_click(event,label1):
-    GPIO.remove_event_detect(18)
-    GPIO.add_event_detect(18, GPIO.RISING, callback=lambda event, Label1=label1: feature_support.Record_release(event,Label1), bouncetime=1200)
     if os.path.exists('nonblocking.wav'):
         os.remove('nonblocking.wav')
     if os.path.exists('nonblocking_filtered.wav'):
@@ -73,8 +71,6 @@ data1 =[]
 
 def Record_release(event,Label1):
     print('feature_support.Record_release')
-    GPIO.remove_event_detect(18)
-    GPIO.add_event_detect(18, GPIO.FALLING, callback=lambda event, Label1=Label1:  feature_support.Record_click(event,Label1), bouncetime=1200)
     global recfile2
     recfile2.stop_recording()
     recfile2.close()
@@ -129,8 +125,8 @@ def Record_release(event,Label1):
         os.remove('person_temp.txt')
         GUI_Builder.object.Button1.config(state=DISABLED)
 
-    #os.remove('nonblocking.wav')
-    #os.remove('nonblocking_filtered.wav')
+    os.remove('nonblocking.wav')
+    os.remove('nonblocking_filtered.wav')
     sys.stdout.flush()
     print("end")
 
