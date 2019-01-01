@@ -57,7 +57,7 @@ def Record_click(event,label1):
     recfile2= rec.open('nonblocking.wav', 'wb')
     print('feature_support.Record_click')
     if feature_support.add > 0:
-        if feature_support.add < 9:
+        if feature_support.add < 10:
             label1.configure(text="Thêm lần thứ %d" %feature_support.add)
 
         else:
@@ -109,7 +109,7 @@ def Record_release(event,Label1):
             feature_support.add +=1
         else:
             Label1.configure(text="Thêm không thành công lần %d, bạn nói nhanh quá." %feature_support.add)
-    if feature_support.add==9:
+    if feature_support.add==11:
         number_person=0
         with open('./data/list_person.txt','a') as lpfile:
             with open('person_temp.txt','r') as ptemp:
