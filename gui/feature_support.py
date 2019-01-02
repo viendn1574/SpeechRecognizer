@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+import gc
 import mmap
 import numpy
 import os
@@ -14,6 +15,8 @@ import GUI_Builder
 import Host_box
 from gtts import gTTS
 import RPi.GPIO as GPIO
+import psutil
+process = psutil.Process(os.getpid())
 
 feature_support.login = False
 feature_support.add=0
@@ -46,6 +49,9 @@ global recfile2
 
 
 def Record_click(event,label1):
+    print('feature_support.Record_click')
+    print(process.memory_info().rss)
+    
     if os.path.exists('nonblocking.wav'):
         os.remove('nonblocking.wav')
     if os.path.exists('nonblocking_filtered.wav'):
@@ -53,7 +59,6 @@ def Record_click(event,label1):
     global recfile2
     global rec
     recfile2= rec.open('nonblocking.wav', 'wb')
-    print('feature_support.Record_click')
     if feature_support.add > 0:
         if feature_support.add < 10:
             label1.configure(text="Thêm lần thứ %d" %feature_support.add)
@@ -74,11 +79,15 @@ def Record_release(event,Label1):
     global recfile2
     recfile2.stop_recording()
     recfile2.close()
+    print(process.memory_info().rss)
     global data1
     if feature_support.add==0:
         features=extract_features.extract_features('nonblocking.wav')
+        print(process.memory_info().rss)
         result=NeuralNetwork.compute(features)
-
+        del features[:]
+        gc.collect()
+        print(process.memory_info().rss)
         print(result)
         if result >= 1:
             name= getNamePerson(int(result))
@@ -89,14 +98,20 @@ def Record_release(event,Label1):
 
         if result == 0:
             Label1.configure(text="Xin thử lại")
+            print ('after config lable')
+            print(process.memory_info().rss)
             os.system("mpg123 ./data/xinthulai.mp3")
+            print ('after play mp3')
+            print(process.memory_info().rss)
 
         if result == -1:
             Label1.configure(text="Bạn nói nhanh quá")
+            print ('after config lable')
+            print(process.memory_info().rss)
             os.system("mpg123 ./data/bannoinhanhqua.mp3")
-
-
-
+            print ('after play mp3')
+            print(process.memory_info().rss)
+        
     if feature_support.add > 0:
         features=extract_features.extract_features('nonblocking.wav')
         if len(features)>0:
@@ -129,6 +144,7 @@ def Record_release(event,Label1):
     os.remove('nonblocking_filtered.wav')
     sys.stdout.flush()
     print("end")
+    print(process.memory_info().rss)
 
 
 def CancleAdd_click():
