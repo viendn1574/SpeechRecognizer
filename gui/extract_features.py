@@ -10,13 +10,10 @@ import numpy as np
 from scipy import signal
 import GUI_Builder
 from FundamentaFreq import freq_from_autocorr
-import os
-import psutil
-process = psutil.Process(os.getpid())
+
 net_noise=NetworkReader.readFrom('./model/net_noise.xml')
 def resample(y, orig_sr, target_sr):
     print ('resample ')
-    print(process.memory_info().rss)
     if orig_sr == target_sr:
         return y
     ratio = float(target_sr) / orig_sr
@@ -24,7 +21,6 @@ def resample(y, orig_sr, target_sr):
     y_hat = signal.resample(y, n_samples, axis=-1)
     ret = np.ascontiguousarray(y_hat, dtype=y.dtype)
     print ('resample end')
-    print(process.memory_info().rss)
     ratio=None
     n_samples=None
     y_hat=None
@@ -32,7 +28,6 @@ def resample(y, orig_sr, target_sr):
 
 def reduce_noise(filename):
     print ('reduce noise')
-    print(process.memory_info().rss)
     namefile = filename.replace(".wav", "")
     lowpass = 21 # Remove lower frequencies.
     highpass = 9000 # Remove higher frequencies.
@@ -48,13 +43,11 @@ def reduce_noise(filename):
     write(namefile+'_filtered.wav', 16000,ns)
     print ('reduce noise end')
     sffclean()
-    print(process.memory_info().rss)
 
 def extract_mfcc(signal,samplerate=16000,winlen=0.025,winstep=0.01,numcep=13,
          nfilt=26,nfft=512,lowfreq=0,highfreq=None,preemph=0.97,ceplifter=22,appendEnergy=True,
          winfunc=lambda x:numpy.ones((x,))):
     print ('extract mfcc')
-    print(process.memory_info().rss)
     feat,energy = fbank(signal,samplerate,winlen,winstep,nfilt,nfft,lowfreq,highfreq,preemph,winfunc)
     feat = numpy.log(feat)
     feat = dct(feat, type=2, axis=1, norm='ortho')[:,:numcep]
@@ -62,7 +55,6 @@ def extract_mfcc(signal,samplerate=16000,winlen=0.025,winstep=0.01,numcep=13,
     if appendEnergy:
         feat=numpy.c_[feat, numpy.log(energy)] # append cepstral coefficient with log of frame energy
     print ('extract mfcc end')
-    print(process.memory_info().rss)
     return feat, numpy.log(energy)
 
 def isNoise(a):
@@ -75,7 +67,6 @@ def isNoise(a):
 
 def extract_features(filename):
     print ('extract features')
-    print(process.memory_info().rss)
     reduce_noise(filename)
     namefile = filename.replace(".wav", "")
     rate,sig = read(namefile+'_filtered.wav')  # Y gives
@@ -102,7 +93,6 @@ def extract_features(filename):
         data.append(numpy.append(datatemp.ravel(0),f0))
     print ('extract features end')
     sffclean()
-    print(process.memory_info().rss)
     return data
 def sffclean():
     sff.destroy_zfft_cache()

@@ -2,9 +2,6 @@ import requests
 import numpy
 import json
 from pybrain.tools.xml import NetworkReader
-import os
-import psutil
-process = psutil.Process(os.getpid())
 model = []
 seed = 7
 numpy.random.seed(seed)
@@ -29,14 +26,12 @@ def add_model(dataset,number_person):
 
 def compute(a):
     print ('compute')
-    print(process.memory_info().rss)
     global model
     number_person=model.__len__()
     if number_person==0:
         return 0
     if len(a) <= 20 :
         print ('compute')
-        print(process.memory_info().rss)
         return -1
     result_allperson=list(numpy.zeros(number_person))
     for person_count in range(0,number_person):
@@ -52,13 +47,11 @@ def compute(a):
         if result_person[1]/len(a) >= 0.7:
             result_allperson[person_count]=result_person[1]/len(a)
     print result_allperson
-    if max(result_allperson) >= 0.7:
+    if max(result_allperson) >= 0.65:
         print ('compute end')
-        print(process.memory_info().rss)
         return result_allperson.index(max(result_allperson))+1
     else:
         print ('compute end')
-        print(process.memory_info().rss)
         return 0
 
 

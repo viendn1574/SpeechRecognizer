@@ -11,9 +11,7 @@ from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
 import feature_support
 from extract_features import sffclean
 import NeuralNetwork
-import os
-import psutil
-process = psutil.Process(os.getpid())
+
 GUI_Builder.object=None
 GPIO.setwarnings(False)
 GPIO.setmode(GPIO.BCM)
@@ -162,7 +160,6 @@ class New_Toplevel:
         self.canvas.draw()
         GPIO.output(23, 1)
         gc.collect()
-        print(process.memory_info().rss)
         self.afterid= self.root.after(5000,self.update_clock)
 if __name__ == '__main__':
     vp_start_gui()
